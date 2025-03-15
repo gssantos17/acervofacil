@@ -1,0 +1,52 @@
+version: '3.89'
+
+services:
+  # Aplicação Spring Boot
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/acervofacilbd
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+    networks:
+      - rede_local
+
+  # Banco de Dados PostgreSQL
+  db:
+    image: postgres:12.0-alpine
+    tty: true
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=gestaopedido
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - rede_local
+
+  # PgAdmin
+  pgadmin:
+    image: dpage/pgadmin4
+    tty: true
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@user.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+    ports:
+      - "9000:80"
+    depends_on:
+      - db
+    networks:
+      - rede_local
+
+volumes:
+  pgdata:
+
+networks:
+  rede_local:
+    driver: bridge
