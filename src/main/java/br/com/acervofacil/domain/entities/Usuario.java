@@ -5,6 +5,7 @@ import br.com.acervofacil.domain.enums.StatusUsuario;
 import br.com.acervofacil.domain.validation.CPF; // Importe a anotação customizada
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -42,11 +43,11 @@ public class Usuario {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "status_usuario DEFAULT 'ATIVO'")
+    @NotNull(message = "O status não pode ser nulo.")
     private StatusUsuario status;
 
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "role DEFAULT 'USUARIO'")
+    @NotNull(message = "O role não pode ser nulo.")
     private Role role;
 
     @OneToOne(mappedBy = "usuario")
