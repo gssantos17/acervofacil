@@ -55,7 +55,7 @@ public class Cliente {
     private Integer quantidadeEmprestimos = 0;
 
     @OneToOne
-    @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true, nullable = true)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     private Usuario usuario;
 
     @CreationTimestamp

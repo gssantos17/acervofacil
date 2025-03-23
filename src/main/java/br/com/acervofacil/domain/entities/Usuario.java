@@ -2,18 +2,16 @@ package br.com.acervofacil.domain.entities;
 
 import br.com.acervofacil.domain.enums.Role;
 import br.com.acervofacil.domain.enums.StatusUsuario;
-import br.com.acervofacil.domain.validation.CPF; // Importe a anotação customizada
+import br.com.acervofacil.domain.validation.CPF;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
