@@ -4,27 +4,34 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tb_endereco")
-@Data
 public class Endereco {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private UUID id;
 
     @NotBlank(message = "A rua não pode estar vazia.")
     @Size(max = 255, message = "A rua não pode ter mais de 255 caracteres.")
     @Column(nullable = false, length = 255)
     private String rua;
 
-    @Size(max = 10, message = "O número não pode ter mais de 10 caracteres.")
+    @Size(max = 5, message = "O número não pode ter precisão  maior que 5.")
     @Column(length = 5)
     private int numero;
 
