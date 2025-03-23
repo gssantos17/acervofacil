@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 public record UsuarioDTO(
         @NotBlank(message = "O CPF não pode estar vazio.")
         @Size(min = 11, max = 11, message = "O CPF deve conter exatamente 11 dígitos.")
-        @CPF(message = "CPF inválido.")
+        @CPF
         String cpf,
 
         @NotBlank(message = "A senha não pode estar vazia.")

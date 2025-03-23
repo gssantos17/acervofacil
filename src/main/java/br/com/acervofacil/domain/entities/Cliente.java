@@ -30,7 +30,7 @@ public class Cliente {
 
     @NotBlank(message = "O CPF não pode estar vazio.")
     @Size(min = 11, max = 11, message = "O CPF deve conter exatamente 11 dígitos.")
-    @CPF(message = "CPF inválido.")
+    @CPF
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
     private String cpf;
 

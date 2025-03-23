@@ -29,7 +29,7 @@ public class Funcionario {
 
     @NotBlank(message = "O CPF não pode estar vazio.")
     @Size(min = 11, max = 11, message = "O CPF deve conter exatamente 11 dígitos.")
-    @CPF(message = "CPF inválido.") // Anotação customizada para validar CPF
+    @CPF
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
     private String cpf;
 
