@@ -1,4 +1,4 @@
-package br.com.acervofacil.domain.entities;
+package br.com.acervofacil.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -44,11 +44,19 @@ public class Contato {
     @Column(nullable = false, length = 255)
     private String email;
 
-    @CreationTimestamp
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
-    @UpdateTimestamp
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    @PrePersist
+    private void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
 }

@@ -1,4 +1,4 @@
-package br.com.acervofacil.domain.entities;
+package br.com.acervofacil.domain.entity;
 
 import br.com.acervofacil.domain.enums.Role;
 import br.com.acervofacil.domain.enums.StatusUsuario;
@@ -42,10 +42,9 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "O status não pode ser nulo.")
-    private StatusUsuario status;
+    private StatusUsuario status = StatusUsuario.ATIVO;
 
     @Enumerated(EnumType.STRING)
-
     @NotNull(message = "O role não pode ser nulo.")
     private Role role;
 
@@ -58,11 +57,19 @@ public class Usuario {
     @Column(name = "ultimo_login")
     private LocalDateTime ultimoLogin;
 
-    @CreationTimestamp
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
-    @UpdateTimestamp
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    @PrePersist
+    private void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
 }

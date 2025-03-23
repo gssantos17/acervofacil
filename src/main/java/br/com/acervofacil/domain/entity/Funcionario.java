@@ -1,4 +1,4 @@
-package br.com.acervofacil.domain.entities;
+package br.com.acervofacil.domain.entity;
 
 import br.com.acervofacil.domain.enums.CargoFuncionario;
 import br.com.acervofacil.domain.validation.CPF; // Importe a anotação customizada
@@ -11,6 +11,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -58,4 +59,20 @@ public class Funcionario {
     @OneToOne(optional = false)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     private Usuario usuario;
+
+    @Column(name = "data_criacao", updatable = false)
+    private LocalDateTime dataCriacao;
+
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @PrePersist
+    private void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
 }

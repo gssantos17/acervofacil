@@ -1,13 +1,12 @@
-package br.com.acervofacil.domain.entities;
+package br.com.acervofacil.domain.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,7 +30,8 @@ public class Endereco {
     @Column(nullable = false, length = 255)
     private String rua;
 
-    @Size(max = 5, message = "O número não pode ter precisão  maior que 5.")
+    @Positive
+    @Digits(integer = 5, fraction = 0)
     @Column(length = 5)
     private int numero;
 
@@ -59,11 +59,19 @@ public class Endereco {
     @Column(length = 8)
     private String cep;
 
-    @CreationTimestamp
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
-    @UpdateTimestamp
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    @PrePersist
+    private void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
 }

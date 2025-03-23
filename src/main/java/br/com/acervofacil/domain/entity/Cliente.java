@@ -1,4 +1,4 @@
-package br.com.acervofacil.domain.entities;
+package br.com.acervofacil.domain.entity;
 
 import br.com.acervofacil.domain.validation.CPF; // Importe a anotação customizada
 import jakarta.persistence.*;
@@ -43,26 +43,34 @@ public class Cliente {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "contato_id", referencedColumnName = "id", unique = true)
     private Contato contato;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id", unique = true)
     private Endereco endereco;
 
     @Column(name = "quantidade_emprestimos")
     private Integer quantidadeEmprestimos = 0;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     private Usuario usuario;
 
-    @CreationTimestamp
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
-    @UpdateTimestamp
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
+
+    @PrePersist
+    private void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    private void preUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
 }
