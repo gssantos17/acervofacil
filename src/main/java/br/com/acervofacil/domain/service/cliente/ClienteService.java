@@ -1,5 +1,6 @@
 package br.com.acervofacil.domain.service.cliente;
 
+import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.api.dto.request.ClienteDTO;
@@ -24,10 +25,10 @@ public interface ClienteService {
      * Atualiza um cliente existente com base no ID informado.
      *
      * @param id         Identificador único do cliente.
-     * @param clienteDTO Objeto contendo os novos dados do cliente.
-     * @return ClienteDTO atualizado.
+     * @param ClienteUpdateDTO Objeto contendo os novos dados do cliente.
+     * @return ClienteResponseDTO atualizado.
      */
-    ClienteResponseDTO atualizar(UUID id, ClienteDTO clienteDTO);
+    ClienteResponseDTO atualizar(UUID id, ClienteUpdateDTO clienteDTO);
 
     /**
      * Remove um cliente do sistema com base no ID informado.
@@ -42,7 +43,7 @@ public interface ClienteService {
      * @param identificador ID (UUID) ou CPF (String).
      * @return Cliente encontrado, se existir.
      */
-    Optional<Cliente> buscarEntidade(Object identificador);
+    Cliente buscarEntidade(Object identificador);
 
     /**
      * Busca um cliente pelo seu identificador único (UUID).

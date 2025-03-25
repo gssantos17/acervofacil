@@ -1,11 +1,18 @@
 package br.com.acervofacil.domain.service.cliente;
 
 import br.com.acervofacil.api.dto.request.ClienteDTO;
+import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
+import br.com.acervofacil.api.dto.request.UsuarioDTO;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
 import br.com.acervofacil.configuration.mapper.ClienteMapper;
+import br.com.acervofacil.configuration.mapper.ContatoMapper;
 import br.com.acervofacil.domain.entity.Cliente;
+import br.com.acervofacil.domain.entity.Contato;
+import br.com.acervofacil.domain.entity.Endereco;
 import br.com.acervofacil.domain.exception.ServiceException;
 import br.com.acervofacil.domain.repository.ClienteRepository;
+import br.com.acervofacil.domain.repository.ContatoRepository;
+import br.com.acervofacil.domain.repository.EnderecoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +29,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
+    private final ContatoMapper contatoMapper;
+    private final ContatoRepository contatoRepository;
+    private final EnderecoRepository enderecoRepository;
 
     @Transactional
     @Override
@@ -39,9 +49,30 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public ClienteResponseDTO atualizar(UUID id, ClienteDTO clienteDTO) {
-        return null;
+    public ClienteResponseDTO atualizar(UUID id, ClienteUpdateDTO clienteDTO) {
+        Cliente cliente = this.buscarEntidade(id);
+
+        Cliente clienteAtualizado = clienteMapper.clienteUpdateDTOToCliente(clienteDTO);
+        cliente.setNome(clienteAtualizado.getNome());
+        cliente.setDataNascimento(clienteAtualizado.getDataNascimento());
+
+        if( clienteDTO.contato() != null ) {
+            Contato contato = clienteAtualizado.getContato();
+            contato.setId(cliente.getContato().getId());
+            contato = contatoRepository.save(contato);
+            cliente.setContato(contato);
+        }
+        if( clienteDTO.endereco() != null ) {
+            Endereco endereco = clienteAtualizado.getEndereco();
+            endereco.setId(cliente.getEndereco().getId());
+            endereco = enderecoRepository.save(endereco);
+            cliente.setEndereco( endereco );
+        }
+
+        cliente = this.clienteRepository.save(cliente);
+        return clienteMapper.clienteToClienteResponseDTO(cliente);
     }
+
 
     @Override
     public void deletar(UUID id) {
@@ -49,24 +80,30 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
-    public Optional<Cliente> buscarEntidade(Object identificador) {
-        if (identificador == null)
-            throw new ServiceException("Identificador Inválido - " + identificador);
+    public Cliente buscarEntidade(Object identificador) {
+        if (identificador == null) {
+            throw new ServiceException("Identificador Inválido");
+        }
 
-        Cliente cliente = null;
-        if (identificador instanceof UUID)
-            cliente = this.clienteRepository.findById((UUID) identificador)
-                    .orElseThrow(() -> new ServiceException("Cliente não existe - ID " + (UUID) identificador));
-        else
-            cliente = this.clienteRepository.findByCpf(identificador.toString())
-                    .orElseThrow(() -> new ServiceException("Cliente não existe - CPF " + identificador.toString()));
+        Cliente cliente;
 
-        return Optional.of(cliente);
+        if (identificador instanceof UUID) {
+            UUID id = (UUID) identificador;
+            cliente = this.clienteRepository.findById(id)
+                    .orElseThrow(() -> new ServiceException("Cliente não encontrado com o ID fornecido: " + id));
+            return cliente;
+        }
+
+        String cpf = identificador.toString();
+        cliente = this.clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ServiceException("Cliente não encontrado com o CPF fornecido: " + cpf));
+
+        return cliente;
     }
 
     @Override
     public Optional<ClienteResponseDTO> buscarPorId(UUID id) {
-        return Optional.empty();
+        return null;
     }
 
     @Override

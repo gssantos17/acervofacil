@@ -1,6 +1,7 @@
 package br.com.acervofacil.configuration.mapper;
 
 import br.com.acervofacil.api.dto.request.ClienteDTO;
+import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
 import br.com.acervofacil.domain.entity.Cliente;
 import org.mapstruct.Mapper;
@@ -9,6 +10,6 @@ import org.mapstruct.Mapper;
 public interface ClienteMapper {
 
     Cliente clienteDTOToCliente(ClienteDTO clienteDTO);
-
+    Cliente clienteUpdateDTOToCliente(ClienteUpdateDTO clienteUpdateDTO);
     ClienteResponseDTO clienteToClienteResponseDTO(Cliente cliente);
 }
