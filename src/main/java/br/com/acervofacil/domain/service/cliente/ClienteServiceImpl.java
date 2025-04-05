@@ -2,26 +2,32 @@ package br.com.acervofacil.domain.service.cliente;
 
 import br.com.acervofacil.api.dto.request.ClienteDTO;
 import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
-import br.com.acervofacil.api.dto.request.UsuarioDTO;
+import br.com.acervofacil.api.dto.response.ClienteComEnderecoContatoProjecao;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
+import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
 import br.com.acervofacil.configuration.mapper.ClienteMapper;
 import br.com.acervofacil.configuration.mapper.ContatoMapper;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Contato;
 import br.com.acervofacil.domain.entity.Endereco;
+import br.com.acervofacil.domain.entity.Usuario;
+import br.com.acervofacil.domain.enums.StatusUsuario;
+import br.com.acervofacil.domain.exception.ClienteNotFoundException;
 import br.com.acervofacil.domain.exception.ServiceException;
 import br.com.acervofacil.domain.repository.ClienteRepository;
 import br.com.acervofacil.domain.repository.ContatoRepository;
 import br.com.acervofacil.domain.repository.EnderecoRepository;
+import br.com.acervofacil.domain.repository.Usuariorepository;
+import br.com.acervofacil.domain.service.usuario.UsuarioServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.Optional;
 import java.util.UUID;
+
 
 @AllArgsConstructor
 @Service
@@ -30,6 +36,7 @@ public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
     private final ContatoMapper contatoMapper;
+    private final UsuarioServiceImpl usuarioService;
     private final ContatoRepository contatoRepository;
     private final EnderecoRepository enderecoRepository;
 
@@ -73,11 +80,16 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteMapper.clienteToClienteResponseDTO(cliente);
     }
 
-
+    @Transactional
     @Override
     public void deletar(UUID id) {
+        Cliente cliente = obterClientePorId(id);
+        Usuario usuarioAtualizado = usuarioService.desativarUsuario(cliente.getUsuario());
+        cliente.setUsuario(usuarioAtualizado);
 
+        clienteRepository.save(cliente);
     }
+
 
     @Override
     public Cliente buscarEntidade(Object identificador) {
@@ -89,35 +101,42 @@ public class ClienteServiceImpl implements ClienteService {
 
         if (identificador instanceof UUID) {
             UUID id = (UUID) identificador;
-            cliente = this.clienteRepository.findById(id)
-                    .orElseThrow(() -> new ServiceException("Cliente não encontrado com o ID fornecido: " + id));
+            cliente = this.obterClientePorId(id);
             return cliente;
         }
 
         String cpf = identificador.toString();
-        cliente = this.clienteRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ServiceException("Cliente não encontrado com o CPF fornecido: " + cpf));
+        cliente = this.obterClientePorCPF(cpf);
 
         return cliente;
     }
 
     @Override
-    public Optional<ClienteResponseDTO> buscarPorId(UUID id) {
-        return null;
-    }
-
-    @Override
-    public ClienteResponseDTO buscarPorCpf(String cpf) {
-        // Tenta buscar o cliente no repositório pelo CPF fornecido
-        Cliente cliente = clienteRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ServiceException("Cliente não encontrado - CPF: " + cpf));
-
-        // Converte a entidade Cliente para o DTO ClienteResponseDTO
+    public ClienteResponseDTO buscarPorId(UUID id) {
+        Cliente cliente = this.obterClientePorId(id);
         return clienteMapper.clienteToClienteResponseDTO(cliente);
     }
 
     @Override
-    public Page<ClienteResponseDTO> listarTodos(Pageable pageable) {
-        return null;
+    public ClienteResponseDTO buscarPorCpf(String cpf) {
+        Cliente cliente = this.obterClientePorCPF(cpf);
+
+        return clienteMapper.clienteToClienteResponseDTO(cliente);
+    }
+
+    @Override
+    public PaginacaoCustomizada<ClienteComEnderecoContatoProjecao> obterClientesPaginados(int page, int size) {
+        Page<ClienteComEnderecoContatoProjecao> clientesPage = clienteRepository.findAllBy(PageRequest.of(page, size));
+        return new PaginacaoCustomizada<>(clientesPage);
+    }
+
+    private Cliente obterClientePorId(UUID id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado - ID: " + id));
+    }
+
+    private Cliente obterClientePorCPF(String cpf){
+        return clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new ServiceException("Cliente não encontrado com o CPF fornecido: " + cpf));
     }
 }

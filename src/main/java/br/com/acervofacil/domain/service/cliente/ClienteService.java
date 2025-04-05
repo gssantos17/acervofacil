@@ -1,12 +1,11 @@
 package br.com.acervofacil.domain.service.cliente;
 
 import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
+import br.com.acervofacil.api.dto.response.ClienteComEnderecoContatoProjecao;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
+import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.api.dto.request.ClienteDTO;
-import br.com.acervofacil.domain.exception.ServiceException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -51,7 +50,7 @@ public interface ClienteService {
      * @param id Identificador único do cliente.
      * @return ClienteResponseDTO, se encontrado.
      */
-    Optional<ClienteResponseDTO> buscarPorId(UUID id);
+    ClienteResponseDTO buscarPorId(UUID id);
 
     /**
      * Busca um cliente pelo CPF.
@@ -64,8 +63,8 @@ public interface ClienteService {
     /**
      * Lista todos os clientes de forma paginada.
      *
-     * @param pageable Objeto de paginação e ordenação.
+     * @param size Objeto de paginação e ordenação.
      * @return Página contendo os clientes encontrados.
      */
-    Page<ClienteResponseDTO> listarTodos(Pageable pageable);
+    PaginacaoCustomizada<ClienteComEnderecoContatoProjecao> obterClientesPaginados(int page, int size);
 }
