@@ -1,6 +1,5 @@
 package br.com.acervofacil.domain.service.contato;
 
-import br.com.acervofacil.api.dto.request.ContatoDTO;
 import br.com.acervofacil.api.dto.response.ContatoResponseDTO;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Funcionario;

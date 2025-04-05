@@ -3,10 +3,8 @@ package br.com.acervofacil.api.utils;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.util.UriUtils;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 public abstract class ApiUtils {
