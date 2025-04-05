@@ -17,17 +17,16 @@ import br.com.acervofacil.domain.exception.ServiceException;
 import br.com.acervofacil.domain.repository.ClienteRepository;
 import br.com.acervofacil.domain.repository.ContatoRepository;
 import br.com.acervofacil.domain.repository.EnderecoRepository;
-import br.com.acervofacil.domain.repository.Usuariorepository;
 import br.com.acervofacil.domain.service.usuario.UsuarioServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.UUID;
-
 
 @AllArgsConstructor
 @Service
@@ -43,18 +42,16 @@ public class ClienteServiceImpl implements ClienteService {
     @Transactional
     @Override
     public ClienteResponseDTO salvar(ClienteDTO clienteDTO) {
-        // Verificar se o CPF já está cadastrado
         if (clienteRepository.existsByCpf(clienteDTO.cpf())) {
             throw new ServiceException("Cliente já existe - " + clienteDTO.cpf());
         }
 
-        // Converter DTO para Entidade usando o Mapper e salvar
         Cliente clienteSalvo = clienteRepository.save(clienteMapper.clienteDTOToCliente(clienteDTO));
-
-        // Retornar DTO correspondente usando o Mapper
         return clienteMapper.clienteToClienteResponseDTO(clienteSalvo);
     }
 
+    @CacheEvict(value = {"clientesById", "clientesByCpf"}, key = "#id")
+    @Transactional
     @Override
     public ClienteResponseDTO atualizar(UUID id, ClienteUpdateDTO clienteDTO) {
         Cliente cliente = this.buscarEntidade(id);
@@ -63,17 +60,18 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setNome(clienteAtualizado.getNome());
         cliente.setDataNascimento(clienteAtualizado.getDataNascimento());
 
-        if( clienteDTO.contato() != null ) {
+        if (clienteDTO.contato() != null) {
             Contato contato = clienteAtualizado.getContato();
             contato.setId(cliente.getContato().getId());
             contato = contatoRepository.save(contato);
             cliente.setContato(contato);
         }
-        if( clienteDTO.endereco() != null ) {
+
+        if (clienteDTO.endereco() != null) {
             Endereco endereco = clienteAtualizado.getEndereco();
             endereco.setId(cliente.getEndereco().getId());
             endereco = enderecoRepository.save(endereco);
-            cliente.setEndereco( endereco );
+            cliente.setEndereco(endereco);
         }
 
         cliente = this.clienteRepository.save(cliente);
@@ -81,15 +79,14 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Transactional
+    @CacheEvict(value = {"clientesById", "clientesByCpf"}, key = "#id")
     @Override
     public void deletar(UUID id) {
         Cliente cliente = obterClientePorId(id);
         Usuario usuarioAtualizado = usuarioService.desativarUsuario(cliente.getUsuario());
         cliente.setUsuario(usuarioAtualizado);
-
         clienteRepository.save(cliente);
     }
-
 
     @Override
     public Cliente buscarEntidade(Object identificador) {
@@ -107,20 +104,20 @@ public class ClienteServiceImpl implements ClienteService {
 
         String cpf = identificador.toString();
         cliente = this.obterClientePorCPF(cpf);
-
         return cliente;
     }
 
+    @Cacheable(value = "clientesById", key = "#id")
     @Override
     public ClienteResponseDTO buscarPorId(UUID id) {
         Cliente cliente = this.obterClientePorId(id);
         return clienteMapper.clienteToClienteResponseDTO(cliente);
     }
 
+    @Cacheable(value = "clientesByCpf", key = "#cpf")
     @Override
     public ClienteResponseDTO buscarPorCpf(String cpf) {
         Cliente cliente = this.obterClientePorCPF(cpf);
-
         return clienteMapper.clienteToClienteResponseDTO(cliente);
     }
 
@@ -135,7 +132,7 @@ public class ClienteServiceImpl implements ClienteService {
                 .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado - ID: " + id));
     }
 
-    private Cliente obterClientePorCPF(String cpf){
+    private Cliente obterClientePorCPF(String cpf) {
         return clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ServiceException("Cliente não encontrado com o CPF fornecido: " + cpf));
     }
