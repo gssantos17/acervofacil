@@ -1,4 +1,4 @@
-package br.com.acervofacil.external.openlibraryapi.client;
+package br.com.acervofacil.external.client;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;

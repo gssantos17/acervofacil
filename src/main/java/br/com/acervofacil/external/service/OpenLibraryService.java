@@ -1,4 +1,4 @@
-package br.com.acervofacil.external.openlibraryapi.service;
+package br.com.acervofacil.external.service;
 
 import br.com.acervofacil.domain.exception.ServiceException;
 import br.com.acervofacil.external.client.OpenLibraryClient;
