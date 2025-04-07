@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteResponseDTO {
+public class FuncionarioResponseDTO {
     private UUID id;
     private String cpf;
     private String nome;
@@ -19,7 +19,7 @@ public class ClienteResponseDTO {
     private String contatoPath;
     private String enderecoPath;
     private String usuarioPath;
-    private Integer quantidadeEmprestimos;
+    private String cargo;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataAtualizacao;
 }

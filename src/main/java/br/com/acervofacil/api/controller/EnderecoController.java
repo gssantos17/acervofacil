@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/enderecos")
+@RequestMapping("api/v1/enderecos")
 public class EnderecoController {
 
     private final EnderecoService enderecoService;

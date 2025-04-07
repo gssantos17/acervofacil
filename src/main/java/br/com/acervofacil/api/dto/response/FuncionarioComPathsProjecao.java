@@ -1,19 +1,27 @@
 package br.com.acervofacil.api.dto.response;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface ClienteComEnderecoContatoProjecao {
+public interface FuncionarioComPathsProjecao {
 
+    // Dados do funcionário
     UUID getId();
     String getCpf();
     String getNome();
     LocalDate getDataNascimento();
-    Integer getQuantidadeEmprestimos();
+    String getCargo();
 
+    // Ids dos recursos relacionados
+    UUID getUsuarioId();
     UUID getContatoId();
     UUID getEnderecoId();
-    UUID getUsuarioId();
+
+    // Caminhos (paths) para os recursos associados
+    default String getUsuarioPath() {
+        return getUsuarioId() != null ? "usuarios/" + getUsuarioId() : null;
+    }
 
     default String getContatoPath() {
         return getContatoId() != null ? "contatos/" + getContatoId() : null;
@@ -23,7 +31,7 @@ public interface ClienteComEnderecoContatoProjecao {
         return getEnderecoId() != null ? "enderecos/" + getEnderecoId() : null;
     }
 
-    default String getUsuarioPath() {
-        return getUsuarioId() != null ? "usuarios/" + getUsuarioId() : null;
-    }
+    // Datas de criação e atualização
+    LocalDateTime getDataCriacao();
+    LocalDateTime getDataAtualizacao();
 }

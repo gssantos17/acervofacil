@@ -24,7 +24,7 @@ public interface ClienteService {
      * Atualiza um cliente existente com base no ID informado.
      *
      * @param id         Identificador único do cliente.
-     * @param ClienteUpdateDTO Objeto contendo os novos dados do cliente.
+     * @param clienteDTO Objeto contendo os novos dados do cliente.
      * @return ClienteResponseDTO atualizado.
      */
     ClienteResponseDTO atualizar(UUID id, ClienteUpdateDTO clienteDTO);

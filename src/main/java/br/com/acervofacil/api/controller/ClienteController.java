@@ -30,7 +30,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/api/v1/clientes", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Clientes", description = "Operações relacionadas aos clientes, como cadastro, atualização, exclusão e consulta")
-@SecurityRequirement(name = "bearerAuth")
 public class ClienteController {
 
     private final ClienteService clienteService;

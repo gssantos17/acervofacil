@@ -45,18 +45,18 @@ public class Funcionario {
 
     @NotNull(message = "O cargo não pode ser nulo.")
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "cargo_funcionario DEFAULT 'BIBLIOTECARIO'")
+    @Column(nullable = false)
     private CargoFuncionario cargo = CargoFuncionario.BIBLIOTECARIO;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "contato_id", referencedColumnName = "id", unique = true)
     private Contato contato;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id", unique = true)
     private Endereco endereco;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     private Usuario usuario;
 

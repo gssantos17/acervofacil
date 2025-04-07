@@ -7,7 +7,7 @@ import br.com.acervofacil.domain.entity.Usuario;
 import br.com.acervofacil.domain.enums.StatusUsuario;
 import br.com.acervofacil.domain.exception.NaoEncontradoException;
 import br.com.acervofacil.domain.exception.ServiceException;
-import br.com.acervofacil.domain.repository.ClienteRepository;
+import br.com.acervofacil.domain.repository.cliente.ClienteRepository;
 import br.com.acervofacil.domain.repository.Usuariorepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

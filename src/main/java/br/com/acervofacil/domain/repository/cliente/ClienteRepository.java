@@ -1,4 +1,4 @@
-package br.com.acervofacil.domain.repository;
+package br.com.acervofacil.domain.repository.cliente;
 
 import br.com.acervofacil.api.dto.response.ClienteComEnderecoContatoProjecao;
 import br.com.acervofacil.domain.entity.Cliente;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
-import static br.com.acervofacil.domain.repository.impl.ClienteRepositoryImpl.BUSCAR_CLIENTE_CONTATO_ENDERECO;
+import static br.com.acervofacil.domain.repository.cliente.ClienteRepositoryImpl.BUSCAR_CLIENTE_CONTATO_ENDERECO;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, UUID> {

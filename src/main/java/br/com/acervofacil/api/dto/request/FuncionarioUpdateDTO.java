@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record FuncionarioDTO(
+public record FuncionarioUpdateDTO(
 
         @NotBlank(message = "O CPF não pode estar vazio.")
         @Size(min = 11, max = 11, message = "O CPF deve conter exatamente 11 dígitos.")
@@ -31,9 +31,5 @@ public record FuncionarioDTO(
 
         @NotNull(message = "O endereço não pode ser nulo.")
         @Valid
-        EnderecoDTO endereco,
-
-        @NotNull(message = "O usuário não pode ser nulo.")
-        @Valid
-        UsuarioDTO usuario
+        EnderecoDTO endereco
 ) {}
