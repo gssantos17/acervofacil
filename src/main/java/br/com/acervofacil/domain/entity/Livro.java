@@ -8,6 +8,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -29,9 +31,8 @@ public class Livro {
     @Column(name = "titulo", nullable = false, length = 255)
     private String titulo;
 
-    @NotBlank(message = "O ISBN não pode estar em branco.")
     @Size(max = 20, message = "O ISBN deve ter no máximo 20 caracteres.")
-    @Column(name = "isbn", nullable = false, unique = true, length = 20)
+    @Column(name = "isbn", length = 20)
     private String isbn;
 
     @Past(message = "A data de publicação deve estar no passado.")
@@ -42,9 +43,13 @@ public class Livro {
     @Column(name = "editora_nome")
     private String editoraNome;
 
-    @ManyToOne
-    @JoinColumn(name = "autor_id", referencedColumnName = "id")
-    private Autor autor;
+    @ManyToMany
+    @JoinTable(
+            name = "livro_autor",
+            joinColumns = @JoinColumn(name = "livro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
+    private Set<Autor> autores = new HashSet<>();
 
     @Size(max = 255, message = "O gênero deve ter no máximo 255 caracteres.")
     @Column(name = "genero")
@@ -80,6 +85,9 @@ public class Livro {
     @Size(min = 2, max = 2, message = "O idioma deve conter 2 caracteres (ex: 'pt', 'en').")
     @Column(name = "idioma", length = 2)
     private String idioma;
+
+    @Column(name = "open_library_id", unique = true, length = 50)
+    private String openLibraryId; // Ex: OL123456W
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
