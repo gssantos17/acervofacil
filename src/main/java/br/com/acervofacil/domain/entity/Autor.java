@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -27,7 +29,7 @@ public class Autor {
 
     @NotBlank(message = "O nome do autor não pode estar vazio.")
     @Size(min = 2, max = 255, message = "O nome do autor deve ter entre 2 e 255 caracteres.")
-    @Column(name = "nome", nullable = false, unique = true, length = 255)
+    @Column(name = "nome", nullable = false, length = 255)
     private String nome;
 
     @Size(max = 255, message = "A nacionalidade deve ter no máximo 255 caracteres.")
@@ -37,6 +39,24 @@ public class Autor {
     @Past(message = "A data de nascimento deve estar no passado.")
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
+
+    @Column(name = "data_falecimento")
+    private LocalDate dataFalecimento;
+
+    @Column(name = "nome_alternativo", length = 255)
+    private String nomeAlternativo;
+
+    @Column(name = "obra_mais_conhecida", length = 255)
+    private String obraMaisConhecida;
+
+    @Column(name = "quantidade_obras")
+    private Integer quantidadeObras;
+
+    @Column(name = "open_library_id", unique = true, length = 50)
+    private String openLibraryId; // Ex: OL23919A
+
+    @ManyToMany(mappedBy = "autores")
+    private Set<Livro> livros = new HashSet<>();
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
