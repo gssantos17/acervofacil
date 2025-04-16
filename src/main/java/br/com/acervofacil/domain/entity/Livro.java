@@ -31,7 +31,7 @@ public class Livro {
     @Column(name = "titulo", nullable = false, length = 255)
     private String titulo; // Título do livro
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "livro_autor",
             joinColumns = @JoinColumn(name = "livro_id"),

@@ -26,7 +26,7 @@ public class Autor {
     @Column(name = "nome", nullable = false, length = 255)
     private String nome; // Nome do autor (extraído da API)
 
-    @ManyToMany(mappedBy = "autores")
+    @ManyToMany(mappedBy = "autores", fetch = FetchType.EAGER)
     private Set<Livro> livros = new HashSet<>(); // Relacionamento ManyToMany com livros
 
     @Column(name = "data_criacao", updatable = false)

@@ -19,6 +19,8 @@ public interface LivroService {
      */
     List<LivroGoogleDTO> buscarLivroPeloTitulo(@NotNull String titulo);
 
+    List<LivroGoogleDTO> buscarLivroPeloAutor(String autor);
+
     /**
      * Busca livros pelo ISBN informado, utilizando a API do Google Books.
      *

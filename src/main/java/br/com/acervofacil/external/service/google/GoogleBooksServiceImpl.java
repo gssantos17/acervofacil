@@ -19,6 +19,11 @@ public class GoogleBooksServiceImpl implements GoogleBooksService {
     }
 
     @Override
+    public GoogleBooksResponse buscarLivroPorAutor(String autor) {
+        return googleBooksClient.buscarLivros("inauthor:" + autor);
+    }
+
+    @Override
     public GoogleBooksResponse buscarLivroPorIsbn(String isbn) {
         return googleBooksClient.buscarLivros("isbn:" + isbn);
     }

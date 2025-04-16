@@ -69,23 +69,33 @@ public class LivroServiceImpl implements LivroService {
     public List<LivroGoogleDTO> buscarLivroPeloTitulo(@NotNull String titulo) {
         GoogleBooksResponse googleBooksResponse = googleBooksService.buscarLivroPorTitulo(titulo);
         this.seNaoExisteLanca(googleBooksResponse, titulo);
+        System.out.println(" TOTAL DE ITENS: " + googleBooksResponse.getTotalItems());
         return googleBooksMapper.toLivroGoogleDTOList(googleBooksResponse.getItems());
     }
 
     public LivroGoogleDTO buscarLivroPeloISBN(@NotNull String isbn) {
         GoogleBooksResponse googleBooksResponse = googleBooksService.buscarLivroPorIsbn(isbn);
         this.seNaoExisteLanca(googleBooksResponse, isbn);
+        System.out.println(" TOTAL DE ITENS: " + googleBooksResponse.getTotalItems());
         return googleBooksMapper.toLivroGoogleDTO(googleBooksResponse.getItems().get(0));
     }
 
     public LivroGoogleDTO buscarLivroPeloId(@NotNull String idGoogle) {
         GoogleBooksResponse googleBooksResponse = googleBooksService.buscarLivroPorId(idGoogle);
         this.seNaoExisteLanca(googleBooksResponse, idGoogle);
+        System.out.println(" TOTAL DE ITENS: " + googleBooksResponse.getTotalItems());
         return googleBooksMapper.toLivroGoogleDTO(googleBooksResponse.getItems().get(0));
     }
 
     private void seNaoExisteLanca(GoogleBooksResponse googleBooksResponse, String parametro){
         if( !googleBooksResponse.existeItem() )
             throw new NaoEncontradoException("Não existe dados para retornar, parametro informado: " + parametro);
+    }
+
+    public List<LivroGoogleDTO> buscarLivroPeloAutor(String autor) {
+        GoogleBooksResponse googleBooksResponse = googleBooksService.buscarLivroPorAutor(autor);
+        this.seNaoExisteLanca(googleBooksResponse, autor);
+        System.out.println(" TOTAL DE ITENS: " + googleBooksResponse.getTotalItems());
+        return googleBooksMapper.toLivroGoogleDTOList(googleBooksResponse.getItems());
     }
 }

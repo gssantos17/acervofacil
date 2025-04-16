@@ -22,6 +22,7 @@ public interface GoogleBooksService {
      */
     GoogleBooksResponse buscarLivroPorTitulo(String titulo);
 
+    GoogleBooksResponse buscarLivroPorAutor(String autor);
     /**
      * Busca livros na API do Google Books com base no número ISBN.
      *
