@@ -2,11 +2,10 @@ package br.com.acervofacil.domain.entity;
 
 import br.com.acervofacil.domain.enums.StatusLivro;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,22 +25,11 @@ public class Livro {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank(message = "O título do livro não pode estar em branco.")
-    @Size(max = 255, message = "O título deve ter no máximo 255 caracteres.")
+    @Column(name = "google_books_id", unique = true, length = 50)
+    private String googleBooksId; // Ex: ID do Google Books para o livro
+
     @Column(name = "titulo", nullable = false, length = 255)
-    private String titulo;
-
-    @Size(max = 20, message = "O ISBN deve ter no máximo 20 caracteres.")
-    @Column(name = "isbn", length = 20)
-    private String isbn;
-
-    @Past(message = "A data de publicação deve estar no passado.")
-    @Column(name = "data_publicacao")
-    private LocalDate dataPublicacao;
-
-    @Size(max = 255, message = "O nome da editora deve ter no máximo 255 caracteres.")
-    @Column(name = "editora_nome")
-    private String editoraNome;
+    private String titulo; // Título do livro
 
     @ManyToMany
     @JoinTable(
@@ -49,45 +37,43 @@ public class Livro {
             joinColumns = @JoinColumn(name = "livro_id"),
             inverseJoinColumns = @JoinColumn(name = "autor_id")
     )
-    private Set<Autor> autores = new HashSet<>();
+    private Set<Autor> autores = new HashSet<>();  // Relacionamento ManyToMany com autores
 
-    @Size(max = 255, message = "O gênero deve ter no máximo 255 caracteres.")
-    @Column(name = "genero")
-    private String genero;
+    @Column(name = "isbn", length = 20)
+    private String isbn; // ISBN do livro
+
+    @Column(name = "descricao", length = 500)
+    private String descricao; // Descrição do livro
+
+    @Column(name = "editora_nome", length = 255)
+    private String editoraNome; // Nome da editora
+
+    @Column(name = "ano_publicacao")
+    private Integer anoPublicacao; // Ano de publicação
+
+    @Column(name = "idioma", length = 2)
+    private String idioma; // Idioma do livro
+
+    @Column(name = "numero_paginas")
+    private Integer numeroPaginas; // Número de páginas
+
+    @Column(name = "capa", length = 255)
+    private String capa; // URL da capa do livro
+
+    @Column(name = "genero", length = 255)
+    private String genero; // Gênero do livro
 
     @Min(value = 0, message = "A quantidade disponível não pode ser negativa.")
     @Column(name = "quantidade_disponivel")
-    private Integer quantidadeDisponivel = 0;
+    private Integer quantidadeDisponivel = 0; // Controle de quantidade disponível
 
     @Min(value = 0, message = "A quantidade total não pode ser negativa.")
     @Column(name = "quantidade_total")
-    private Integer quantidadeTotal = 0;
+    private Integer quantidadeTotal = 0; // Controle de quantidade total
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 20)
-    private StatusLivro status = StatusLivro.DISPONIVEL;
-
-    @Min(value = 1, message = "O número de páginas deve ser maior que zero.")
-    @Column(name = "numero_paginas")
-    private Integer numeroPaginas;
-
-    @Size(max = 255, message = "A descrição deve ter no máximo 255 caracteres.")
-    @Column(name = "descricao")
-    private String descricao;
-
-    @Size(max = 255, message = "A URL da capa deve ter no máximo 255 caracteres.")
-    @Column(name = "capa")
-    private String capa;
-
-    @Column(name = "ano_publicacao")
-    private Integer anoPublicacao;
-
-    @Size(min = 2, max = 2, message = "O idioma deve conter 2 caracteres (ex: 'pt', 'en').")
-    @Column(name = "idioma", length = 2)
-    private String idioma;
-
-    @Column(name = "open_library_id", unique = true, length = 50)
-    private String openLibraryId; // Ex: OL123456W
+    private StatusLivro status = StatusLivro.DISPONIVEL; // Status do livro (Disponível, Emprestado, etc.)
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;

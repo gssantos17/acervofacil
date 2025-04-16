@@ -34,8 +34,14 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler({ClienteNotFoundException.class, NaoEncontradoException.class})
+    @ExceptionHandler(ClienteNotFoundException.class)
     public ResponseEntity<RespostaPadronizada<String>> handleClienteNotFoundException(ClienteNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(RespostaPadronizada.notFound(ex.getMessage()));
+    }
+
+    @ExceptionHandler(NaoEncontradoException.class)
+    public ResponseEntity<RespostaPadronizada<String>> handleNaoEncontradoException(NaoEncontradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(RespostaPadronizada.notFound(ex.getMessage()));
     }
