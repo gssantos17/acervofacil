@@ -1,9 +1,16 @@
 package br.com.acervofacil.configuration.mapper;
 
 import br.com.acervofacil.api.dto.request.LivroInputDTO;
+import br.com.acervofacil.api.dto.response.AutorResumoDTO;
 import br.com.acervofacil.api.dto.response.LivroGoogleDTO;
+import br.com.acervofacil.api.dto.response.LivroDTO;
+import br.com.acervofacil.domain.entity.Autor;
 import br.com.acervofacil.domain.entity.Livro;
 import org.mapstruct.*;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Mapper para conversão entre DTOs e a entidade Livro.
@@ -13,12 +20,9 @@ public interface LivroMapper {
 
     /**
      * Mapeia um LivroGoogleDTO para a entidade Livro.
-     *
-     * @param dto DTO com os dados do livro
-     * @return A entidade Livro com os dados mapeados
      */
-    @Mapping(target = "id", ignore = true) // ID é gerado automaticamente
-    @Mapping(target = "autores", ignore = true) // será tratado separadamente
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "autores", ignore = true)
     @Mapping(source = "googleBooksId", target = "googleBooksId")
     @Mapping(source = "titulo", target = "titulo")
     @Mapping(source = "isbn", target = "isbn")
@@ -38,16 +42,29 @@ public interface LivroMapper {
 
     /**
      * Mapeia o LivroInputDTO para a entidade Livro.
-     *
-     * @param dto DTO de entrada com os dados do livro
-     * @return A entidade Livro com os dados mapeados
      */
-    @Mapping(target = "id", ignore = true) // ID é gerado automaticamente
-    @Mapping(target = "autores", ignore = true) // Autores devem ser tratados separadamente
-    @Mapping(target = "quantidadeDisponivel", source = "quantidadeDisponivel") // Quantidade disponível
-    @Mapping(target = "quantidadeTotal", source = "quantidadeTotal") // Quantidade total
-    @Mapping(target = "status", constant = "DISPONIVEL") // Status padrão para o livro (DISPONIVEL)
-    @Mapping(target = "dataCriacao", ignore = true) // A data de criação será gerada automaticamente
-    @Mapping(target = "dataAtualizacao", ignore = true) // A data de atualização será gerada automaticamente
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "autores", ignore = true)
+    @Mapping(target = "quantidadeDisponivel", source = "quantidadeDisponivel")
+    @Mapping(target = "quantidadeTotal", source = "quantidadeTotal")
+    @Mapping(target = "status", constant = "DISPONIVEL")
+    @Mapping(target = "dataCriacao", ignore = true)
+    @Mapping(target = "dataAtualizacao", ignore = true)
     Livro toEntity(LivroInputDTO dto);
+
+    /**
+     * Mapeia a entidade Livro para o DTO de resposta LivroDTO.
+     */
+    @Mapping(source = "autores", target = "autores")
+    LivroDTO toDTO(Livro livro);
+
+    /**
+     * Converte um conjunto de autores em uma lista de AutorResumoDTO.
+     */
+    default List<AutorResumoDTO> mapAutores(Set<Autor> autores) {
+        if (autores == null) return null;
+        return autores.stream()
+                .map(autor -> new AutorResumoDTO(autor.getId(), autor.getNome()))
+                .collect(Collectors.toList());
+    }
 }

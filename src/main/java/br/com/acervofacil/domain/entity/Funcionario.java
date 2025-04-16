@@ -12,6 +12,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -59,6 +60,9 @@ public class Funcionario {
     @OneToOne(optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "funcionarioResponsavel", cascade = CascadeType.ALL)
+    private Set<Emprestimo> emprestimos;
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;

@@ -75,6 +75,9 @@ public class Livro {
     @Column(name = "status", length = 20)
     private StatusLivro status = StatusLivro.DISPONIVEL; // Status do livro (Disponível, Emprestado, etc.)
 
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
+    private Set<Emprestimo> emprestimos;
+
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 

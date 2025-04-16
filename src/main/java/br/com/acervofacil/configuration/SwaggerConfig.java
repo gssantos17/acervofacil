@@ -38,4 +38,13 @@ public class SwaggerConfig {
                 .pathsToMatch("/api/v1/funcionarios/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi livroApi() {
+        return GroupedOpenApi.builder()
+                .group("Livros")
+                .pathsToMatch("/api/v1/livros/**")
+                .build();
+    }
+
 }

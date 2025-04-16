@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -57,6 +58,9 @@ public class Cliente {
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", unique = true)
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private Set<Emprestimo> emprestimos;
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
