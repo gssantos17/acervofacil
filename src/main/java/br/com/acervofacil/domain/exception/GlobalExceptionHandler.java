@@ -55,6 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<RespostaPadronizada<String>> handleGeneralException(Exception ex) {
+        ex.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(RespostaPadronizada.internalServerError("Erro interno no servidor.", ex.getMessage(), null));
     }

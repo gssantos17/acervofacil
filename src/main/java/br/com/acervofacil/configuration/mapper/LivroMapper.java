@@ -1,6 +1,6 @@
 package br.com.acervofacil.configuration.mapper;
 
-import br.com.acervofacil.api.dto.request.LivroInputDTO;
+import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.AutorResumoDTO;
 import br.com.acervofacil.api.dto.response.LivroGoogleDTO;
 import br.com.acervofacil.api.dto.response.LivroDTO;
@@ -50,7 +50,7 @@ public interface LivroMapper {
     @Mapping(target = "status", constant = "DISPONIVEL")
     @Mapping(target = "dataCriacao", ignore = true)
     @Mapping(target = "dataAtualizacao", ignore = true)
-    Livro toEntity(LivroInputDTO dto);
+    Livro toEntity(RequisicaoLivroDTO dto);
 
     /**
      * Mapeia a entidade Livro para o DTO de resposta LivroDTO.

@@ -1,9 +1,8 @@
 package br.com.acervofacil.domain.service.livro;
 
-import br.com.acervofacil.api.dto.request.LivroInputDTO;
+import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.LivroDTO;
 import br.com.acervofacil.api.dto.response.LivroGoogleDTO;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public interface LivroService {
      * @param input o DTO contendo os dados do livro a ser cadastrado (não pode ser nulo).
      * @return o DTO {@link LivroDTO} representando o livro salvo.
      */
-    LivroDTO salvar(LivroInputDTO input);
+    LivroDTO salvar(RequisicaoLivroDTO input);
 
     /**
      * Busca livros pelo nome do autor, utilizando a API do Google Books.

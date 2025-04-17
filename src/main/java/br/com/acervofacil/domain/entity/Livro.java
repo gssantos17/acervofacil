@@ -1,6 +1,7 @@
 package br.com.acervofacil.domain.entity;
 
 import br.com.acervofacil.domain.enums.StatusLivro;
+import br.com.acervofacil.domain.exception.ServiceException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -92,5 +93,17 @@ public class Livro {
     @PreUpdate
     private void preUpdate() {
         this.dataAtualizacao = LocalDateTime.now();
+    }
+
+    public void diminuirQuantidadeDisponivel(Integer qtd){
+        if( quantidadeDisponivel <= 0 )
+            throw new ServiceException("Verifique as informações do livro, o mesmo não está disponivel no momento.");
+        if( qtd <= 0)
+            throw new ServiceException("Não é possível diminuir a quantidade, o valor do parametro está zerado.");
+        this.quantidadeDisponivel -= qtd;
+    }
+
+    public void aumentarQuantidadeDisponivel(Integer qtd){
+        this.quantidadeDisponivel += qtd;
     }
 }

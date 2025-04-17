@@ -1,6 +1,6 @@
 package br.com.acervofacil.api.controller;
 
-import br.com.acervofacil.api.dto.request.LivroInputDTO;
+import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.LivroDTO;
 import br.com.acervofacil.api.dto.response.LivroGoogleDTO;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +42,7 @@ public class LivroController {
     )
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RespostaPadronizada<LivroDTO>> criarLivro(
-            @RequestBody @Valid LivroInputDTO input) {
+            @RequestBody @Valid RequisicaoLivroDTO input) {
 
         LivroDTO livroCriado = livroServiceImpl.salvar(input);
         URI uri = ApiUtils.getURI("/livros/", livroCriado.getId());

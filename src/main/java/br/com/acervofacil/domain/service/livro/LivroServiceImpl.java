@@ -1,6 +1,6 @@
 package br.com.acervofacil.domain.service.livro;
 
-import br.com.acervofacil.api.dto.request.LivroInputDTO;
+import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.LivroDTO;
 import br.com.acervofacil.api.utils.ServiceUtils;
 import br.com.acervofacil.configuration.mapper.GoogleBooksMapper;
@@ -33,22 +33,22 @@ public class LivroServiceImpl implements LivroService {
     private final LivroMapper livroMapper;
 
     @Transactional
-    public LivroDTO salvar(@NotNull LivroInputDTO input) {
+    public LivroDTO salvar(@NotNull RequisicaoLivroDTO input) {
         LivroGoogleDTO livroGoogleDTO = this.obterDetalhesLivroPorIdOuISBN(input);
         Livro livro = livroMapper.toEntity(livroGoogleDTO);
-        livro.setQuantidadeDisponivel(input.getQuantidadeDisponivel());
-        livro.setQuantidadeTotal(input.getQuantidadeTotal());
+        livro.setQuantidadeDisponivel(input.quantidadeDisponivel());
+        livro.setQuantidadeTotal(input.quantidadeTotal());
         Set<Autor> autores = autorService.salvar(livroGoogleDTO);
         livro.setAutores(autores);
         Livro livroSalvo = livroRepository.save(livro);
         return livroMapper.toDTO(livroSalvo);
     }
 
-    private LivroGoogleDTO obterDetalhesLivroPorIdOuISBN(LivroInputDTO input){
+    private LivroGoogleDTO obterDetalhesLivroPorIdOuISBN(RequisicaoLivroDTO input){
         if( input.existeISBN() ) {
-            return this.buscarLivroPeloISBNExterno(input.getIsbn());
+            return this.buscarLivroPeloISBNExterno(input.isbn());
         }
-        return this.buscarLivroPeloIdExterno(input.getGoogleBooksId());
+        return this.buscarLivroPeloIdExterno(input.googleBooksId());
     }
 
     public List<LivroGoogleDTO> buscarLivroPeloTituloExterno(@NotNull String titulo) {
