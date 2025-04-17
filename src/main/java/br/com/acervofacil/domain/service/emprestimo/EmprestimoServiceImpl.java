@@ -73,7 +73,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         Emprestimo emprestimo = buscarEmprestimoOuLancar(id);
         Funcionario funcionario = buscarFuncionarioOuLancar(idFuncionarioResponsavel);
 
-        EmprestimoValidacaoHelper.validarAtualizacaoPorSupervisor(emprestimo, novoStatus);
+        EmprestimoValidacaoHelper.validarAtualizacaoPorSupervisor(emprestimo, novoStatus, funcionario);
 
         emprestimo.setFuncionarioResponsavel(funcionario);
         emprestimo.setStatus(novoStatus);
