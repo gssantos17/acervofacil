@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -60,6 +61,9 @@ public class Emprestimo {
     @ManyToOne
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private Cliente cliente;
+
+    @OneToOne(mappedBy = "emprestimo", cascade = CascadeType.ALL)
+    private Multa multa;
 
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
