@@ -1,4 +1,4 @@
-package br.com.acervofacil.api.dto.response;
+package br.com.acervofacil.api.projections;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

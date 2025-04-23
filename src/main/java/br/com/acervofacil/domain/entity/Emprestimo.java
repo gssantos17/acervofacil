@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "emprestimo")
+@Table(name = "tb_emprestimo")
 @Data
 @NoArgsConstructor
 public class Emprestimo {

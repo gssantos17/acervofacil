@@ -3,6 +3,7 @@ package br.com.acervofacil.domain.service.emprestimo;
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoMultaDTO;
+import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
 import br.com.acervofacil.api.utils.ServiceUtils;
 import br.com.acervofacil.configuration.mapper.EmprestimoMapper;
 import br.com.acervofacil.domain.entity.*;
@@ -17,6 +18,10 @@ import br.com.acervofacil.domain.repository.funcionario.FuncionarioRepository;
 import br.com.acervofacil.domain.service.emprestimo.helper.EmprestimoValidacaoHelper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -102,14 +107,14 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 
     @Override
     public ResumoEmprestimoDTO buscarPorId(UUID id) {
-        // TODO: implementar lógica de busca por ID
-        return null;
+        Emprestimo emprestimo = buscarEmprestimoOuLancar(id);
+        return emprestimoMapper.toDto(emprestimo);
     }
 
     @Override
-    public List<ResumoEmprestimoDTO> listarTodos() {
-        // TODO: implementar lógica de listagem
-        return null;
+    public Page<ResumoEmprestimoProjection> listarTodos(int pagina, int tamanho, String campoOrdenacao, String direcao) {
+        Pageable pageable = ServiceUtils.criarPageable(pagina, tamanho, campoOrdenacao, direcao);
+        return emprestimoRepository.listarResumoEmprestimos(pageable);
     }
 
     public Cliente buscarClienteOuLancar(UUID uuid){
@@ -156,7 +161,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         LocalDateTime real     = emprestimo.getDataDevolucaoReal();
 
         if (prevista == null || real == null || !real.isAfter(prevista)) {
-            return; // Sem multa
+            return;
         }
 
         long diasAtraso = Duration.between(

@@ -1,6 +1,6 @@
 package br.com.acervofacil.domain.repository.cliente;
 
-import br.com.acervofacil.api.dto.response.ClienteComEnderecoContatoProjecao;
+import br.com.acervofacil.api.projections.ClienteComEnderecoContatoProjecao;
 import br.com.acervofacil.domain.entity.Cliente;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

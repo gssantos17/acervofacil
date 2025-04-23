@@ -1,8 +1,6 @@
 package br.com.acervofacil.domain.repository.funcionario;
 
-import br.com.acervofacil.api.dto.response.ClienteComEnderecoContatoProjecao;
-import br.com.acervofacil.api.dto.response.FuncionarioComPathsProjecao;
-import br.com.acervofacil.domain.entity.Cliente;
+import br.com.acervofacil.api.projections.FuncionarioComPathsProjecao;
 import br.com.acervofacil.domain.entity.Funcionario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -2,7 +2,7 @@ package br.com.acervofacil.domain.service.cliente;
 
 import br.com.acervofacil.api.dto.request.ClienteDTO;
 import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
-import br.com.acervofacil.api.dto.response.ClienteComEnderecoContatoProjecao;
+import br.com.acervofacil.api.projections.ClienteComEnderecoContatoProjecao;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
 import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
 import br.com.acervofacil.configuration.mapper.ClienteMapper;

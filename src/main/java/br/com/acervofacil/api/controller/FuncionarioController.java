@@ -3,6 +3,7 @@ package br.com.acervofacil.api.controller;
 import br.com.acervofacil.api.dto.request.FuncionarioDTO;
 import br.com.acervofacil.api.dto.request.FuncionarioUpdateDTO;
 import br.com.acervofacil.api.dto.response.*;
+import br.com.acervofacil.api.projections.FuncionarioComPathsProjecao;
 import br.com.acervofacil.api.utils.ApiUtils;
 import br.com.acervofacil.domain.service.funcionario.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;

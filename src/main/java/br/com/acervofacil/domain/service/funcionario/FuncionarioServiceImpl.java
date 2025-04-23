@@ -2,7 +2,7 @@ package br.com.acervofacil.domain.service.funcionario;
 
 import br.com.acervofacil.api.dto.request.FuncionarioDTO;
 import br.com.acervofacil.api.dto.request.FuncionarioUpdateDTO;
-import br.com.acervofacil.api.dto.response.FuncionarioComPathsProjecao;
+import br.com.acervofacil.api.projections.FuncionarioComPathsProjecao;
 import br.com.acervofacil.api.dto.response.FuncionarioResponseDTO;
 import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
 import br.com.acervofacil.configuration.mapper.FuncionarioMapper;

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "multa")
+@Table(name = "tb_multa")
 @Getter
 @Setter
 @NoArgsConstructor
