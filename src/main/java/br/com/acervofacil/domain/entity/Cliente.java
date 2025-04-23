@@ -62,6 +62,9 @@ public class Cliente {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private Set<Emprestimo> emprestimos;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Reserva> reservas;
+
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 

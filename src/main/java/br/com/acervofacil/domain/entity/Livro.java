@@ -79,6 +79,10 @@ public class Livro {
     @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL)
     private Set<Emprestimo> emprestimos;
 
+    @OneToMany(mappedBy = "livro", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Reserva> reservas = new HashSet<>();
+
+
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 

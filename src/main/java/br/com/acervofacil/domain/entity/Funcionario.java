@@ -64,6 +64,9 @@ public class Funcionario {
     @OneToMany(mappedBy = "funcionarioResponsavel", cascade = CascadeType.ALL)
     private Set<Emprestimo> emprestimos;
 
+    @OneToMany(mappedBy = "funcionario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Reserva> reservas;
+
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao;
 
