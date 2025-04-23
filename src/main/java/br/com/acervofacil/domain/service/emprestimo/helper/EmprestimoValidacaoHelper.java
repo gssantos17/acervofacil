@@ -9,8 +9,15 @@ import br.com.acervofacil.domain.enums.Role;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
 import br.com.acervofacil.domain.enums.StatusLivro;
 import br.com.acervofacil.domain.exception.ServiceException;
+import br.com.acervofacil.domain.entity.Multa;
+import br.com.acervofacil.domain.enums.StatusMulta;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EmprestimoValidacaoHelper {
@@ -52,7 +59,7 @@ public class EmprestimoValidacaoHelper {
     }
 
     public static void validarDevolucaoEmprestimo(Emprestimo emprestimo) {
-        if (StatusEmprestimo.FINALIZADO.equals(emprestimo.getStatus())) {
+        if (StatusEmprestimo.CONCLUIDO.equals(emprestimo.getStatus())) {
             throw new ServiceException("Este empréstimo já foi finalizado.");
         }
 
@@ -66,13 +73,52 @@ public class EmprestimoValidacaoHelper {
         if( !Role.ADMINISTRADOR.equals(role))
             throw new ServiceException("Apenas administradores podem executar esta ação.");
 
-        if (StatusEmprestimo.FINALIZADO.equals(emprestimo.getStatus()) || StatusEmprestimo.CANCELADO.equals(emprestimo.getStatus())) {
+        if (StatusEmprestimo.CONCLUIDO.equals(emprestimo.getStatus()) || StatusEmprestimo.CANCELADO.equals(emprestimo.getStatus())) {
             throw new ServiceException("Não é possível atualizar o status. Este empréstimo já está finalizado ou cancelado.");
         }
 
-        if (!StatusEmprestimo.FINALIZADO.equals(novoStatus) && !StatusEmprestimo.CANCELADO.equals(novoStatus)) {
+        if (!StatusEmprestimo.CONCLUIDO.equals(novoStatus) && !StatusEmprestimo.CANCELADO.equals(novoStatus)) {
             throw new ServiceException("Apenas os status FINALIZADO ou CANCELADO podem ser atribuídos por um supervisor.");
         }
+    }
+
+    public static void aplicarMultaSeAtrasado(Emprestimo emprestimo) {
+        LocalDateTime prevista = emprestimo.getDataDevolucaoPrevista();
+        LocalDateTime real     = emprestimo.getDataDevolucaoReal();
+
+        if (prevista == null || real == null || !real.isAfter(prevista)) {
+            return; // Sem multa
+        }
+
+        long diasAtraso = Duration.between(
+                prevista.toLocalDate().atStartOfDay(),
+                real.toLocalDate().atStartOfDay()
+        ).toDays();
+
+        BigDecimal valor = calcularValorMulta(diasAtraso);
+
+        Multa multa = new Multa();
+        multa.setValor(valor);
+        multa.setStatus(StatusMulta.PENDENTE);
+        multa.setDataMulta(LocalDateTime.now());
+        multa.setEmprestimo(emprestimo);
+        emprestimo.setMulta(multa);
+    }
+
+    private static BigDecimal calcularValorMulta(long diasAtraso) {
+        Map<Long, BigDecimal> faixaMulta = new LinkedHashMap<>();
+        faixaMulta.put(7L, BigDecimal.valueOf(1.00));  // Até 7 dias: R$1.00 por dia
+        faixaMulta.put(15L, BigDecimal.valueOf(1.50)); // Até 15 dias: R$1.50 por dia
+        faixaMulta.put(30L, BigDecimal.valueOf(2.00)); // Até 30 dias: R$2.00 por dia
+        faixaMulta.put(Long.MAX_VALUE, BigDecimal.valueOf(3.00)); // Acima de 30 dias: R$3.00 por dia
+
+        for (Map.Entry<Long, BigDecimal> entry : faixaMulta.entrySet()) {
+            if (diasAtraso <= entry.getKey()) {
+                return BigDecimal.valueOf(diasAtraso).multiply(entry.getValue());
+            }
+        }
+
+        return BigDecimal.ZERO;
     }
 
 }

@@ -33,7 +33,7 @@ public class Emprestimo {
     private LocalDateTime dataEmprestimo;
 
     @Column(name = "data_devolucao_prevista")
-    @FutureOrPresent(message = "A data de devolução prevista deve ser no futuro ou na data atual.")
+    //@FutureOrPresent(message = "A data de devolução prevista deve ser no futuro ou na data atual.")
     private LocalDateTime dataDevolucaoPrevista;
 
     @Column(name = "data_devolucao_real")
@@ -62,7 +62,7 @@ public class Emprestimo {
     @JoinColumn(name = "id_cliente", referencedColumnName = "id", nullable = false)
     private Cliente cliente;
 
-    @OneToOne(mappedBy = "emprestimo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "emprestimo", cascade = CascadeType.ALL, orphanRemoval = true)
     private Multa multa;
 
     @Column(name = "data_criacao", updatable = false)

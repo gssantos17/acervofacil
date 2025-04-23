@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -75,6 +74,7 @@ public class EmprestimoController {
             @ApiResponse(responseCode = "404", description = "Empréstimo não encontrado", content = @Content(schema = @Schema(implementation = RespostaPadronizada.class))),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = RespostaPadronizada.class)))
     })
+
     @PutMapping(value = "/{uuid}/status")
     public ResponseEntity<RespostaPadronizada<ResumoEmprestimoDTO>> atualizarStatusEmprestimo(
             @PathVariable @NotNull(message = "O UUID do empréstimo é obrigatório") UUID uuid,
@@ -85,5 +85,16 @@ public class EmprestimoController {
         return ApiUtils.obterResponseEntityOk(emprestimoAtualizado, null);
     }
 
-
+    @Operation(
+            summary = "Pagar empréstimo",
+            description = "Finaliza o pagamento de um empréstimo com status 'AGUARDANDO_PAGAMENTO'. " +
+                    "O pagamento inclui eventuais multas aplicadas e altera o status do empréstimo para 'CONCLUIDO'."
+    )
+    @PutMapping("/{uuid}/pagar")
+    public ResponseEntity<RespostaPadronizada<ResumoEmprestimoDTO>> pagarEmprestimo(
+            @PathVariable @NotNull(message = "O UUID do empréstimo é obrigatório") UUID uuid,
+            @RequestParam @NotNull(message = "O ID do funcionário responsável é obrigatório") UUID idFuncionarioResponsavel) {
+        emprestimoService.pagarEmprestimo(uuid, idFuncionarioResponsavel);
+        return ApiUtils.obterResponseEntityOk(null, "Pagamento efetuado com sucesso.");
+    }
 }

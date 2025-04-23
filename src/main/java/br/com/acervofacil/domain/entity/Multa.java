@@ -10,8 +10,10 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -55,8 +57,17 @@ public class Multa {
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
-    @NotNull(message = "A data de atualização não pode ser nula")
     @Column(name = "data_atualizacao", nullable = false)
     private LocalDateTime dataAtualizacao;
+
+    @PreUpdate
+    public void preUpdate(){
+        this.dataAtualizacao = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public  void prePersist(){
+        this.dataCriacao = LocalDateTime.now();
+    }
 
 }

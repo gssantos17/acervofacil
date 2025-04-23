@@ -1,0 +1,15 @@
+package br.com.acervofacil.api.dto.request;
+
+import br.com.acervofacil.domain.enums.StatusMulta;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record MultaDTO(
+        UUID id,
+        BigDecimal valor,
+        StatusMulta status,
+        LocalDateTime dataMulta,
+        LocalDateTime dataPagamento,
+        UUID emprestimoId // Referência ao empréstimo associado
+) {}

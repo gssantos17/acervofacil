@@ -2,14 +2,15 @@ package br.com.acervofacil.domain.service.emprestimo;
 
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
+import br.com.acervofacil.api.dto.response.ResumoMultaDTO;
 import br.com.acervofacil.api.utils.ServiceUtils;
 import br.com.acervofacil.configuration.mapper.EmprestimoMapper;
-import br.com.acervofacil.domain.entity.Cliente;
-import br.com.acervofacil.domain.entity.Emprestimo;
-import br.com.acervofacil.domain.entity.Funcionario;
-import br.com.acervofacil.domain.entity.Livro;
+import br.com.acervofacil.domain.entity.*;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
+import br.com.acervofacil.domain.enums.StatusMulta;
+import br.com.acervofacil.domain.exception.ServiceException;
 import br.com.acervofacil.domain.repository.LivroRepository;
+import br.com.acervofacil.domain.repository.MultaRepository;
 import br.com.acervofacil.domain.repository.cliente.ClienteRepository;
 import br.com.acervofacil.domain.repository.emprestimo.EmprestimoRepository;
 import br.com.acervofacil.domain.repository.funcionario.FuncionarioRepository;
@@ -18,6 +19,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +36,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
     private final ClienteRepository clienteRepository;
     private final FuncionarioRepository funcionarioRepository;
     private final LivroRepository livroRepository;
+    private final MultaRepository multaRepository;
 
     @Transactional
     @Override
@@ -58,8 +62,9 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         Emprestimo emprestimo = buscarEmprestimoOuLancar(uuid);
         emprestimo.setDataDevolucaoReal( LocalDateTime.now() );
         EmprestimoValidacaoHelper.validarDevolucaoEmprestimo(emprestimo);
+        EmprestimoValidacaoHelper.aplicarMultaSeAtrasado(emprestimo);
 
-        emprestimo.setStatus( StatusEmprestimo.FINALIZADO );
+        emprestimo.setStatus( StatusEmprestimo.AGUARDANDO_PAGAMENTO );
         Livro livro = emprestimo.getLivro();
         livro.aumentarQuantidadeDisponivel( emprestimo.getQuantidadeEmprestada() );
 
@@ -119,7 +124,65 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         return ServiceUtils.obterOuLancar( livroRepository.findById(uuid), "Livro", uuid.toString());
     }
 
+    @Transactional
+    @Override
+    public void pagarEmprestimo(UUID uuid, UUID idFuncionarioResponsavel) {
+        Emprestimo emprestimo = buscarEmprestimoOuLancar(uuid);
+
+        if (!emprestimo.getStatus().equals(StatusEmprestimo.AGUARDANDO_PAGAMENTO)) {
+            throw new ServiceException("Finalize o empréstimo primeiro.");
+        }
+
+        Funcionario funcionario = buscarFuncionarioOuLancar(idFuncionarioResponsavel);
+        emprestimo.setFuncionarioResponsavel(funcionario);
+
+        Multa multa = emprestimo.getMulta();
+        if (multa != null && multa.getStatus() == StatusMulta.PENDENTE) {
+            multa.setDataPagamento(LocalDateTime.now());
+            multa.setStatus(StatusMulta.PAGA);
+        }
+
+        emprestimo.setStatus(StatusEmprestimo.CONCLUIDO);
+        emprestimoRepository.save(emprestimo);
+    }
+
+
     public Emprestimo buscarEmprestimoOuLancar(UUID uuid) {
         return ServiceUtils.obterOuLancar( emprestimoRepository.findById(uuid), "Emprestimo", uuid.toString());
+    }
+
+    private void aplicarMultaSeAtrasado(Emprestimo emprestimo) {
+        LocalDateTime prevista = emprestimo.getDataDevolucaoPrevista();
+        LocalDateTime real     = emprestimo.getDataDevolucaoReal();
+
+        if (prevista == null || real == null || !real.isAfter(prevista)) {
+            return; // Sem multa
+        }
+
+        long diasAtraso = Duration.between(
+                prevista.toLocalDate().atStartOfDay(),
+                real.toLocalDate().atStartOfDay()
+        ).toDays();
+
+        BigDecimal valor = calcularValorMulta(diasAtraso);
+
+        Multa multa = new Multa();
+        multa.setValor(valor);
+        multa.setStatus(StatusMulta.PENDENTE);
+        multa.setDataMulta(LocalDateTime.now());
+        multa.setEmprestimo(emprestimo);
+        emprestimo.setMulta(multa);
+    }
+
+    private BigDecimal calcularValorMulta(long diasAtraso) {
+        if (diasAtraso <= 7) {
+            return BigDecimal.valueOf(diasAtraso).multiply(BigDecimal.valueOf(1.00));
+        } else if (diasAtraso <= 15) {
+            return BigDecimal.valueOf(diasAtraso).multiply(BigDecimal.valueOf(1.50));
+        } else if (diasAtraso <= 30) {
+            return BigDecimal.valueOf(diasAtraso).multiply(BigDecimal.valueOf(2.00));
+        } else {
+            return BigDecimal.valueOf(diasAtraso).multiply(BigDecimal.valueOf(3.00));
+        }
     }
 }

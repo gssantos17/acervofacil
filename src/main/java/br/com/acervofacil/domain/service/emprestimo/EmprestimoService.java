@@ -29,4 +29,6 @@ public interface EmprestimoService {
     Funcionario buscarFuncionarioOuLancar(UUID uuid);
 
     Livro buscarLivroOuLancar(UUID uuid);
+
+    void pagarEmprestimo(UUID uuid, UUID idFuncionarioResponsavel );
 }
