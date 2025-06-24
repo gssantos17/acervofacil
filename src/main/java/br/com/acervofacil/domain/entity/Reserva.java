@@ -13,6 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "tb_reserva")
 public class Reserva {
 
@@ -52,6 +53,8 @@ public class Reserva {
 
     @PrePersist
     private void prePersist() {
+        this.dataReserva = LocalDateTime.now();
+        this.status = StatusReserva.ATIVO;
         this.dataCriacao = LocalDateTime.now();
     }
 

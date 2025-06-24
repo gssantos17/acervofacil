@@ -98,8 +98,6 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         return emprestimoMapper.toDto(emprestimoAtualizado);
     }
 
-
-
     @Override
     public void excluir(UUID id) {
         // TODO: implementar lógica de exclusão lógica

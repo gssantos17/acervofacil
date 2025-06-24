@@ -35,6 +35,7 @@ public interface EmprestimoMapper {
     @Mapping(target = "clienteId", expression = "java(java.util.UUID.fromString(String.valueOf(emprestimo.getCliente().getId())))")
     @Mapping(target = "funcionarioResponsavelId", expression = "java(java.util.UUID.fromString(String.valueOf(emprestimo.getFuncionarioResponsavel().getId())))")
     @Mapping(target = "livroTitulo", source = "livro.titulo")
+    @Mapping(target = "multa", source = "emprestimo.multa")
     @Mapping(target = "clienteNome", source = "cliente.nome")
     @Mapping(target = "funcionarioResponsavelNome", source = "funcionarioResponsavel.nome")
     ResumoEmprestimoDTO toDto(Emprestimo emprestimo);

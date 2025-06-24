@@ -95,8 +95,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         Cliente cliente;
 
-        if (identificador instanceof UUID) {
-            UUID id = (UUID) identificador;
+        if (identificador instanceof UUID id) {
             cliente = this.obterClientePorId(id);
             return cliente;
         }

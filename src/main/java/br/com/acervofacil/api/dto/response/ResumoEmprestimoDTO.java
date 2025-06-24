@@ -28,6 +28,8 @@ public class ResumoEmprestimoDTO {
 
     private BigDecimal taxaEmprestimo;
 
+    private ResumoMultaDTO multa;
+
     private LocalDateTime dataEmprestimo;
 
     private LocalDateTime dataDevolucaoPrevista;

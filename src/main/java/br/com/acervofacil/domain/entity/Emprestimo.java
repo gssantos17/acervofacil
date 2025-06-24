@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,7 +32,6 @@ public class Emprestimo {
     private LocalDateTime dataEmprestimo;
 
     @Column(name = "data_devolucao_prevista")
-    //@FutureOrPresent(message = "A data de devolução prevista deve ser no futuro ou na data atual.")
     private LocalDateTime dataDevolucaoPrevista;
 
     @Column(name = "data_devolucao_real")
@@ -72,14 +70,14 @@ public class Emprestimo {
     private LocalDateTime dataAtualizacao;
 
     @PrePersist
-    public void prePersist(){
-        this.dataCriacao    = LocalDateTime.now();
-        this.dataEmprestimo = LocalDateTime.now();
-        this.status         = StatusEmprestimo.ATIVO;
+    public void prePersist() {
+        dataCriacao = LocalDateTime.now();
+        dataEmprestimo = LocalDateTime.now();
+        status = StatusEmprestimo.ATIVO;
     }
 
     @PreUpdate
-    public void preUpdate(){
-        this.dataAtualizacao = LocalDateTime.now();
+    public void preUpdate() {
+        dataAtualizacao = LocalDateTime.now();
     }
 }
