@@ -106,7 +106,7 @@ public class ClienteController {
             @ApiResponse(responseCode = "204", description = "Nenhum cliente encontrado")
     })
     @GetMapping
-    public ResponseEntity<RespostaPadronizada<PaginacaoCustomizada<ClienteComEnderecoContatoProjecao>>> getClientes(
+    public ResponseEntity<RespostaPadronizada<PaginacaoCustomizada<ClienteComEnderecoContatoProjecao>>> listarClientes(
             @Parameter(description = "Número da página", example = "0", in = ParameterIn.QUERY) @PositiveOrZero @RequestParam int page,
             @Parameter(description = "Tamanho da página", example = "10", in = ParameterIn.QUERY) @PositiveOrZero @RequestParam int size) {
         PaginacaoCustomizada<ClienteComEnderecoContatoProjecao> paginacao = clienteService.obterClientesPaginados(page, size);
