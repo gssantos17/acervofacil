@@ -126,7 +126,7 @@ public class FuncionarioController {
 
         var paginacao = funcionarioService.obterFuncionariosPaginados(page, size);
 
-        if (paginacao.getTotalElementos() > 0) {
+        if (paginacao.getTotalElementos() > 0 ) {
             return ApiUtils.obterResponseEntityOk(paginacao, null);
         } else {
             return ResponseEntity.noContent().build();

@@ -47,4 +47,12 @@ public class SwaggerConfig {
                 .build();
     }
 
+        @Bean
+    public GroupedOpenApi ReservaApi() {
+        return GroupedOpenApi.builder()
+                .group("Reservas")
+                .pathsToMatch("/api/v1/reservas/**")
+                .build();
+    }
+
 }

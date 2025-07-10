@@ -17,12 +17,15 @@ import br.com.acervofacil.domain.repository.funcionario.FuncionarioRepository;
 import br.com.acervofacil.domain.service.usuario.UsuarioServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+
+import br.com.acervofacil.api.utils.ServiceUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -116,12 +119,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     private Funcionario buscarFuncionarioPorIdOuLancar(UUID id) {
-        return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new NaoEncontradoException("Funcionário com ID " + id + " não encontrado"));
+        return ServiceUtils.obterOuLancar(funcionarioRepository.findById(id), "Funcionario", id.toString());
     }
 
     private Funcionario buscarFuncionarioPorCpfOuLancar(String cpf) {
-        return funcionarioRepository.findByCpf(cpf)
-                .orElseThrow(() -> new NaoEncontradoException("Funcionário com CPF " + cpf + " não encontrado"));
+        return ServiceUtils.obterOuLancar(funcionarioRepository.findByCpf(cpf), "Funcionario", cpf);
+
     }
 }
