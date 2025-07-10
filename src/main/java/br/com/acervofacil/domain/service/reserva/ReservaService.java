@@ -1,5 +1,6 @@
 package br.com.acervofacil.domain.service.reserva;
 
+import br.com.acervofacil.api.dto.request.RequisicaoReservaDTO;
 import br.com.acervofacil.api.dto.response.ResumoReservaDTO;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Funcionario;
@@ -15,14 +16,13 @@ import java.util.UUID;
 public interface ReservaService {
 
     /**
-     * Cria uma nova reserva de livro.
+     * Cria uma nova reserva de livro com base nas informações fornecidas na requisição.
      *
-     * @param clienteId     ID do cliente que está fazendo a reserva.
-     * @param livroId       ID do livro a ser reservado.
-     * @param funcionarioId ID do funcionário responsável pela reserva.
-     * @return A reserva criada representada por ResumoReservaDTO.
+     * @param requisicaoReservaDTO Objeto contendo os dados necessários para a criação da reserva,
+     *                             como ID do cliente, ID do livro e ID do funcionário responsável.
+     * @return Um DTO contendo o resumo da reserva criada.
      */
-    ResumoReservaDTO criarReserva(UUID clienteId, UUID livroId, UUID funcionarioId);
+    ResumoReservaDTO criarReserva(RequisicaoReservaDTO requisicaoReservaDTO);
 
     /**
      * Cancela uma reserva existente.

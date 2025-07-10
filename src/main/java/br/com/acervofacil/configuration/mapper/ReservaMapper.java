@@ -9,9 +9,15 @@ import org.mapstruct.*;
 public interface ReservaMapper {
 
     @Mapping(target = "livroId", source = "livro.id")
+    @Mapping(target = "tituloLivro", expression = "java(reserva.getLivro() != null ? reserva.getLivro().getTitulo() : null)")
     @Mapping(target = "clienteId", source = "cliente.id")
+    @Mapping(target = "nomeCliente", expression = "java(reserva.getCliente() != null ? reserva.getCliente().getNome() : null)")
+    @Mapping(target = "funcionarioId", expression = "java(reserva.getFuncionario() != null ? reserva.getFuncionario().getId() : null)")
+    @Mapping(target = "nomeFuncionario", expression = "java(reserva.getFuncionario() != null ? reserva.getFuncionario().getNome() : null)")
+    @Mapping(target = "dataExpiracao", source = "dataExpiracaoReserva")
     @Mapping(target = "status", source = "status", qualifiedByName = "statusToString")
     ResumoReservaDTO reservaToResumoReservaDTO(Reserva reserva);
+
 
     @Mapping(target = "livro.id", source = "livroId")
     @Mapping(target = "cliente.id", source = "clienteId")

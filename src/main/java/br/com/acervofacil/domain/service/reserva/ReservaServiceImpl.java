@@ -1,5 +1,6 @@
 package br.com.acervofacil.domain.service.reserva;
 
+import br.com.acervofacil.api.dto.request.RequisicaoReservaDTO;
 import br.com.acervofacil.api.dto.response.ResumoReservaDTO;
 import br.com.acervofacil.api.utils.ServiceUtils;
 import br.com.acervofacil.configuration.mapper.ReservaMapper;
@@ -34,12 +35,13 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Transactional
     @Override
-    public ResumoReservaDTO criarReserva(UUID clienteId, UUID livroId, UUID funcionarioId) {
-        Cliente cliente = buscarClienteOuLancar(clienteId);
-        Funcionario funcionario = buscarFuncionarioOuLancar(funcionarioId);
-        Livro livro = buscarLivroOuLancar(livroId);
+    public ResumoReservaDTO criarReserva(RequisicaoReservaDTO req) {
+        Cliente cliente = buscarClienteOuLancar(req.clienteId());
+        Funcionario funcionario = buscarFuncionarioOuLancar(req.funcionarioId());
+        Livro livro = buscarLivroOuLancar(req.livroId());
 
         ReservaValidacaoHelper.validarDadosReserva(cliente, livro, funcionario);
+
         var reserva = Reserva.builder()
                 .cliente(cliente)
                 .funcionario(funcionario)
@@ -65,7 +67,8 @@ public class ReservaServiceImpl implements ReservaService {
 
     @Override
     public ResumoReservaDTO buscarReservaPorId(UUID reservaId) {
-        return null;
+        Reserva reserva = this.buscarReservaOuLancar(reservaId);
+        return reservaMapper.reservaToResumoReservaDTO(reserva);
     }
 
     @Override
@@ -102,4 +105,11 @@ public class ReservaServiceImpl implements ReservaService {
     public Cliente buscarClienteOuLancar(UUID uuid) {
         return ServiceUtils.obterOuLancar( clienteRepository.findById(uuid), "Cliente", uuid.toString());
     }
+
+    public Reserva buscarReservaOuLancar(UUID uuid) {
+        return ServiceUtils.obterOuLancar( reservaRepository.findReservaWithLivroClienteFuncionarioById(uuid), "Reserva", uuid.toString() );
+    }
+
+
+
 }

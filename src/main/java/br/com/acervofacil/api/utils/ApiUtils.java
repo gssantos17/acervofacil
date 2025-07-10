@@ -47,7 +47,7 @@ public abstract class ApiUtils {
 
     public static URI getURI(String path, UUID uuid) {
         return UriComponentsBuilder.fromPath(path)
-                .pathSegment(uuid.toString()) // Forma mais clara e segura
+                .pathSegment(uuid.toString())
                 .build()
                 .toUri();
     }
