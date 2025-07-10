@@ -1,7 +1,7 @@
 package br.com.acervofacil.domain.service.contato;
 
 import br.com.acervofacil.api.dto.response.ContatoResponseDTO;
-import br.com.acervofacil.configuration.mapper.ContatoMapper;
+import br.com.acervofacil.api.dto.mapper.ContatoMapper;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Contato;
 import br.com.acervofacil.domain.entity.Funcionario;

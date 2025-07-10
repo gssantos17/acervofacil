@@ -3,7 +3,7 @@ package br.com.acervofacil.domain.service.reserva;
 import br.com.acervofacil.api.dto.request.RequisicaoReservaDTO;
 import br.com.acervofacil.api.dto.response.ResumoReservaDTO;
 import br.com.acervofacil.api.utils.ServiceUtils;
-import br.com.acervofacil.configuration.mapper.ReservaMapper;
+import br.com.acervofacil.api.dto.mapper.ReservaMapper;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Funcionario;
 import br.com.acervofacil.domain.entity.Livro;
@@ -20,7 +20,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service

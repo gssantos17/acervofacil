@@ -1,4 +1,4 @@
-package br.com.acervofacil.configuration.mapper;
+package br.com.acervofacil.api.dto.mapper;
 
 import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.AutorResumoDTO;

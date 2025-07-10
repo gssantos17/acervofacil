@@ -1,4 +1,4 @@
-package br.com.acervofacil.configuration.mapper;
+package br.com.acervofacil.api.dto.mapper;
 
 import br.com.acervofacil.api.dto.response.ResumoReservaDTO;
 import br.com.acervofacil.domain.entity.Reserva;

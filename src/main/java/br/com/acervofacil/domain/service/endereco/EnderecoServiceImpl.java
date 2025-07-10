@@ -1,7 +1,7 @@
 package br.com.acervofacil.domain.service.endereco;
 
 import br.com.acervofacil.api.dto.response.EnderecoResponseDTO;
-import br.com.acervofacil.configuration.mapper.EnderecoMapper;
+import br.com.acervofacil.api.dto.mapper.EnderecoMapper;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Funcionario;
 import br.com.acervofacil.domain.exception.NaoEncontradoException;

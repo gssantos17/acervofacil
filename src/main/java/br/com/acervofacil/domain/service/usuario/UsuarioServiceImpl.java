@@ -1,7 +1,7 @@
 package br.com.acervofacil.domain.service.usuario;
 
 import br.com.acervofacil.api.dto.response.UsuarioResponseDTO;
-import br.com.acervofacil.configuration.mapper.UsuarioMapper;
+import br.com.acervofacil.api.dto.mapper.UsuarioMapper;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Usuario;
 import br.com.acervofacil.domain.enums.StatusUsuario;

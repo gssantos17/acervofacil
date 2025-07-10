@@ -2,10 +2,9 @@ package br.com.acervofacil.domain.service.emprestimo;
 
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
-import br.com.acervofacil.api.dto.response.ResumoMultaDTO;
 import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
 import br.com.acervofacil.api.utils.ServiceUtils;
-import br.com.acervofacil.configuration.mapper.EmprestimoMapper;
+import br.com.acervofacil.api.dto.mapper.EmprestimoMapper;
 import br.com.acervofacil.domain.entity.*;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
 import br.com.acervofacil.domain.enums.StatusMulta;
@@ -19,15 +18,12 @@ import br.com.acervofacil.domain.service.emprestimo.helper.EmprestimoValidacaoHe
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service

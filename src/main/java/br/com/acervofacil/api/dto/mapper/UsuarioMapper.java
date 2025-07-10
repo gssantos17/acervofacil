@@ -1,4 +1,4 @@
-    package br.com.acervofacil.configuration.mapper;
+    package br.com.acervofacil.api.dto.mapper;
 
     import br.com.acervofacil.api.dto.request.UsuarioDTO;
     import br.com.acervofacil.api.dto.response.UsuarioResponseDTO;

@@ -1,4 +1,4 @@
-package br.com.acervofacil.configuration.mapper;
+package br.com.acervofacil.api.dto.mapper;
 
 import br.com.acervofacil.api.dto.request.EnderecoDTO;
 import br.com.acervofacil.api.dto.response.EnderecoResponseDTO;
