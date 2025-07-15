@@ -2,7 +2,7 @@ package br.com.acervofacil.domain.service.reserva;
 
 import br.com.acervofacil.api.dto.request.RequisicaoReservaDTO;
 import br.com.acervofacil.api.dto.response.ResumoReservaDTO;
-import br.com.acervofacil.api.utils.ServiceUtils;
+import br.com.acervofacil.utils.ServiceUtils;
 import br.com.acervofacil.api.dto.mapper.ReservaMapper;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Funcionario;

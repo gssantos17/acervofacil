@@ -4,7 +4,7 @@ import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
 import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
-import br.com.acervofacil.api.utils.ApiUtils;
+import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
 import br.com.acervofacil.domain.service.emprestimo.EmprestimoService;
 import io.swagger.v3.oas.annotations.Operation;

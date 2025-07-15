@@ -2,7 +2,7 @@ package br.com.acervofacil.api.controller;
 
 import br.com.acervofacil.api.dto.response.ContatoResponseDTO;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
-import br.com.acervofacil.api.utils.ApiUtils;
+import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.service.contato.ContatoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,9 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(
-        value = "/api/v1/contatos",
-        produces = MediaType.APPLICATION_JSON_VALUE,
-        consumes = MediaType.APPLICATION_JSON_VALUE
+        value = "/api/v1/contatos"
 )
 @Tag(
         name = "Contatos",
@@ -47,7 +45,7 @@ public class ContatoController {
             description = "Contato não encontrado",
             content = @Content
     )
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<RespostaPadronizada<ContatoResponseDTO>> buscarPorId(
             @Parameter(
                     description = "ID do contato",

@@ -3,7 +3,7 @@ package br.com.acervofacil.domain.service.emprestimo;
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
 import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
-import br.com.acervofacil.api.utils.ServiceUtils;
+import br.com.acervofacil.utils.ServiceUtils;
 import br.com.acervofacil.api.dto.mapper.EmprestimoMapper;
 import br.com.acervofacil.domain.entity.*;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
@@ -92,11 +92,6 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         Emprestimo emprestimoAtualizado = emprestimoRepository.save(emprestimo);
 
         return emprestimoMapper.toDto(emprestimoAtualizado);
-    }
-
-    @Override
-    public void excluir(UUID id) {
-        // TODO: implementar lógica de exclusão lógica
     }
 
     @Override

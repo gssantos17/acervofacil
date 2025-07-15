@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import br.com.acervofacil.api.utils.ServiceUtils;
+import br.com.acervofacil.utils.ServiceUtils;
 
 @Service
 @RequiredArgsConstructor

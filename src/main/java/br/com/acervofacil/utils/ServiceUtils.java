@@ -1,4 +1,4 @@
-package br.com.acervofacil.api.utils;
+package br.com.acervofacil.utils;
 
 import br.com.acervofacil.domain.exception.NaoEncontradoException;
 import br.com.acervofacil.external.dto.google.GoogleBooksResponse;

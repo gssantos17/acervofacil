@@ -2,7 +2,7 @@ package br.com.acervofacil.domain.service.livro;
 
 import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.LivroDTO;
-import br.com.acervofacil.api.utils.ServiceUtils;
+import br.com.acervofacil.utils.ServiceUtils;
 import br.com.acervofacil.api.dto.mapper.GoogleBooksMapper;
 import br.com.acervofacil.api.dto.mapper.LivroMapper;
 import br.com.acervofacil.domain.entity.Autor;

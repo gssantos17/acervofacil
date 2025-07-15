@@ -4,7 +4,7 @@ import br.com.acervofacil.api.dto.request.ClienteDTO;
 import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
 import br.com.acervofacil.api.dto.response.*;
 import br.com.acervofacil.api.projections.ClienteComEnderecoContatoProjecao;
-import br.com.acervofacil.api.utils.ApiUtils;
+import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.service.cliente.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -2,7 +2,7 @@ package br.com.acervofacil.api.controller;
 
 import br.com.acervofacil.api.dto.response.EnderecoResponseDTO;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
-import br.com.acervofacil.api.utils.ApiUtils;
+import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.service.endereco.EnderecoService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

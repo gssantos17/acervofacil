@@ -4,7 +4,7 @@ import br.com.acervofacil.api.dto.request.RequisicaoLivroDTO;
 import br.com.acervofacil.api.dto.response.LivroDTO;
 import br.com.acervofacil.api.dto.response.LivroGoogleDTO;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
-import br.com.acervofacil.api.utils.ApiUtils;
+import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.service.livro.LivroServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

@@ -21,8 +21,6 @@ public interface EmprestimoService {
 
     ResumoEmprestimoDTO atualizarStatusPorSupervisor(UUID id, StatusEmprestimo status, UUID idFuncionarioResponsavel);
 
-    void excluir(UUID id);
-
     ResumoEmprestimoDTO buscarPorId(UUID id);
 
     Page<ResumoEmprestimoProjection> listarTodos(int pagina, int tamanho, String campoOrdenacao, String direcao);

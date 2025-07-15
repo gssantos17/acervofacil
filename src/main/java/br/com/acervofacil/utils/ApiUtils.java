@@ -1,4 +1,4 @@
-package br.com.acervofacil.api.utils;
+package br.com.acervofacil.utils;
 
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
 import org.springframework.http.ResponseEntity;
