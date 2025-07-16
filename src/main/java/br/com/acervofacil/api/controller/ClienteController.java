@@ -9,6 +9,7 @@ import br.com.acervofacil.domain.service.cliente.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,11 +20,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -95,9 +98,33 @@ public class ClienteController {
     })
     @GetMapping("/buscar")
     public ResponseEntity<RespostaPadronizada<ClienteResponseDTO>> buscarPorCpf(
-            @Parameter(description = "CPF do cliente", example = "123.456.789-00", required = true) @RequestParam @NotBlank String cpf) {
+            @Parameter(description = "CPF do cliente", example = "12345678900", required = true) @RequestParam @NotBlank String cpf) {
         ClienteResponseDTO clienteResponseDTO = clienteService.buscarPorCpf(cpf);
         return ApiUtils.obterResponseEntityOk(clienteResponseDTO, null);
+    }
+
+    @Operation(summary = "Buscar cliente por nome")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Cliente(s) encontrado(s)",
+                    content = @Content(
+                            mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = ClienteComEnderecoContatoProjecao.class))
+                    )
+            ),
+            @ApiResponse(responseCode = "404", description = "Cliente(s) não encontrado(s)",
+                    content = @Content(schema = @Schema(implementation = RespostaPadronizada.class))
+            ),
+            @ApiResponse(responseCode = "400", description = "Parâmetro 'nome' deve conter pelo menos 3 caracteres",
+                    content = @Content(schema = @Schema(implementation = RespostaPadronizada.class))
+            )
+    })
+    @GetMapping("/buscarPorNome")
+    public ResponseEntity<RespostaPadronizada<List<ClienteComEnderecoContatoProjecao>>> buscarPorNome(
+            @Parameter(description = "Nome do cliente (mínimo 3 caracteres)", example = "Gabriel Silva", required = true)
+            @RequestParam
+            @NotBlank(message = "O parâmetro 'nome' não pode estar vazio")
+            @Length(min = 3, message = "O parâmetro 'nome' deve conter pelo menos 3 caracteres") String nome) {
+        return ApiUtils.obterResponseEntityOk(clienteService.buscarPorNome(nome), null);
     }
 
     @Operation(summary = "Listar clientes paginados", description = "Retorna uma lista paginada de clientes com seus contatos e endereços")

@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -59,19 +60,8 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setNome(clienteAtualizado.getNome());
         cliente.setDataNascimento(clienteAtualizado.getDataNascimento());
 
-        if (clienteDTO.contato() != null) {
-            Contato contato = clienteAtualizado.getContato();
-            contato.setId(cliente.getContato().getId());
-            contato = contatoRepository.save(contato);
-            cliente.setContato(contato);
-        }
-
-        if (clienteDTO.endereco() != null) {
-            Endereco endereco = clienteAtualizado.getEndereco();
-            endereco.setId(cliente.getEndereco().getId());
-            endereco = enderecoRepository.save(endereco);
-            cliente.setEndereco(endereco);
-        }
+        atualizarContatoSeNecessario(cliente, clienteAtualizado, clienteDTO);
+        atualizarEnderecoSeNecessario(cliente, clienteAtualizado, clienteDTO);
 
         cliente = this.clienteRepository.save(cliente);
         return clienteMapper.clienteToClienteResponseDTO(cliente);
@@ -120,6 +110,15 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Override
+    public List<ClienteComEnderecoContatoProjecao> buscarPorNome(String nome) {
+        var dados = clienteRepository.findAllByNome(nome);
+        if( dados == null || dados.isEmpty()) {
+            throw new ClienteNotFoundException("Não existe cliente para o critério de busca: " + nome);
+        }
+        return dados;
+    }
+
+    @Override
     public PaginacaoCustomizada<ClienteComEnderecoContatoProjecao> obterClientesPaginados(int page, int size) {
         Page<ClienteComEnderecoContatoProjecao> clientesPage = clienteRepository.findAllBy(PageRequest.of(page, size));
         return new PaginacaoCustomizada<>(clientesPage);
@@ -133,5 +132,23 @@ public class ClienteServiceImpl implements ClienteService {
     private Cliente obterClientePorCPF(String cpf) {
         return clienteRepository.findByCpf(cpf)
                 .orElseThrow(() -> new ServiceException("Cliente não encontrado com o CPF fornecido: " + cpf));
+    }
+
+    private void atualizarContatoSeNecessario(Cliente cliente, Cliente clienteAtualizado, ClienteUpdateDTO dto) {
+        if (dto.contato() != null && cliente.getContato() != null) {
+            Contato novoContato = clienteAtualizado.getContato();
+            novoContato.setId(cliente.getContato().getId());
+            Contato contatoSalvo = contatoRepository.save(novoContato);
+            cliente.setContato(contatoSalvo);
+        }
+    }
+
+    private void atualizarEnderecoSeNecessario(Cliente cliente, Cliente clienteAtualizado, ClienteUpdateDTO dto) {
+        if (dto.endereco() != null && cliente.getEndereco() != null) {
+            Endereco novoEndereco = clienteAtualizado.getEndereco();
+            novoEndereco.setId(cliente.getEndereco().getId());
+            Endereco enderecoSalvo = enderecoRepository.save(novoEndereco);
+            cliente.setEndereco(enderecoSalvo);
+        }
     }
 }

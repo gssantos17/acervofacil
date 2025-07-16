@@ -7,6 +7,7 @@ import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.api.dto.request.ClienteDTO;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ClienteService {
@@ -58,6 +59,14 @@ public interface ClienteService {
      * @return ClienteResponseDTO, se encontrado.
      */
     ClienteResponseDTO buscarPorCpf(String cpf);
+
+    /**
+     * Busca clientes pelo nome.
+     *
+     * @param nome Nome do cliente.
+     * @return Lista de ClienteResponseDTO com os clientes encontrados.
+     */
+    List<ClienteComEnderecoContatoProjecao> buscarPorNome(String nome);
 
     /**
      * Lista todos os clientes de forma paginada.

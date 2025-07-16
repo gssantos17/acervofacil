@@ -7,6 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +33,55 @@ public class GlobalExceptionHandler {
                         "Requisição inválida.",
                         null,
                         erros
+                )
+        );
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<RespostaPadronizada<List<ErroValidacaoDTO>>> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
+        List<ErroValidacaoDTO> erros = ex.getAllErrors()
+                .stream()
+                .map(error -> {
+                    String campo = error instanceof ObjectError ? ((ObjectError) error).getObjectName() : "parâmetro";
+                    return new ErroValidacaoDTO(
+                            campo,
+                            null,
+                            error.getDefaultMessage()
+                    );
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.badRequest().body(
+                RespostaPadronizada.badRequest(
+                        "Requisição inválida.",
+                        null,
+                        erros
+                )
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<RespostaPadronizada<List<ErroValidacaoDTO>>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String nomeParametro = ex.getName(); // Ex: "id"
+        Object valorInformado = ex.getValue(); // Ex: "abc"
+        String mensagem = String.format(
+                "O valor '%s' informado para o parâmetro '%s' é inválido. Esperado: %s.",
+                valorInformado,
+                nomeParametro,
+                ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "tipo desconhecido"
+        );
+
+        ErroValidacaoDTO erro = new ErroValidacaoDTO(
+                nomeParametro,
+                valorInformado,
+                mensagem
+        );
+
+        return ResponseEntity.badRequest().body(
+                RespostaPadronizada.badRequest(
+                        "Parâmetro inválido na requisição.",
+                        null,
+                        List.of(erro)
                 )
         );
     }

@@ -18,5 +18,22 @@ public class ClienteRepositoryImpl {
                     "FROM Cliente c " +
                     "JOIN c.contato ct " +
                     "JOIN c.endereco e " +
-                    "LEFT JOIN c.usuario u";
+                    "LEFT JOIN c.usuario u " +
+                    "WHERE u.status = 'ATIVO'";
+
+    public static final String BUSCAR_CLIENTE_CONTATO_ENDERECO_POR_NOME =
+            "SELECT c.id AS id, " +
+                    "c.cpf AS cpf, " +
+                    "c.nome AS nome, " +
+                    "c.dataNascimento AS dataNascimento, " +
+                    "c.quantidadeEmprestimos AS quantidadeEmprestimos, " +
+                    "ct.id AS contatoId, " +
+                    "e.id AS enderecoId, " +
+                    "u.id AS usuarioId " +
+                    "FROM Cliente c " +
+                    "JOIN c.contato ct " +
+                    "JOIN c.endereco e " +
+                    "LEFT JOIN c.usuario u " +
+                    "WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', ?1, '%'))";
+
 }

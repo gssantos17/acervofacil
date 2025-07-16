@@ -8,6 +8,7 @@ import br.com.acervofacil.domain.entity.Funcionario;
 import br.com.acervofacil.domain.exception.NaoEncontradoException;
 import br.com.acervofacil.domain.repository.ContatoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -19,6 +20,7 @@ public class ContatoServiceImpl implements ContatoService {
     private final ContatoRepository contatoRepository;
     private final ContatoMapper contatoMapper;
 
+    @Cacheable(value = "contatoPorId", key = "#id")
     @Override
     public ContatoResponseDTO obterContatoID(UUID id) {
         Contato contato = contatoRepository.findById(id)
