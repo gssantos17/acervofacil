@@ -67,7 +67,6 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteMapper.clienteToClienteResponseDTO(cliente);
     }
 
-
     @Transactional
     @CacheEvict(value = {"clientesById", "clientesByCpf"}, key = "#id")
     @Override
