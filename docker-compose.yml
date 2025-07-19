@@ -1,9 +1,8 @@
-version: '3.89'
+version: '3.8'
 
 services:
-  # Aplicação Spring Boot
   app:
-    build: .
+    image: acervofacil-app:1.0.0
     ports:
       - "8080:8080"
     depends_on:
@@ -11,18 +10,17 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/acervofacilbd
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
     networks:
       - rede_local
 
-  # Banco de Dados PostgreSQL
   db:
     image: postgres:12.0-alpine
     tty: true
     volumes:
       - pgdata:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=1234
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=acervofacilbd
       - PGDATA=/var/lib/postgresql/data
     ports:
@@ -30,7 +28,6 @@ services:
     networks:
       - rede_local
 
-  # PgAdmin
   pgadmin:
     image: dpage/pgadmin4
     tty: true
