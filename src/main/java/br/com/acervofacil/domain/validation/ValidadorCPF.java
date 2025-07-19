@@ -3,7 +3,7 @@ package br.com.acervofacil.domain.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class CPFValidator implements ConstraintValidator<CPF, String> {
+public class ValidadorCPF implements ConstraintValidator<CPF, String> {
 
     @Override
     public boolean isValid(String cpf, ConstraintValidatorContext context) {

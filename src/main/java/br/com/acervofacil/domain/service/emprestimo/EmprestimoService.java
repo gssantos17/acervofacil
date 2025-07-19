@@ -2,15 +2,13 @@ package br.com.acervofacil.domain.service.emprestimo;
 
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
-import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
+import br.com.acervofacil.api.projections.ResumoEmprestimoProjecao;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Funcionario;
 import br.com.acervofacil.domain.entity.Livro;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface EmprestimoService {
@@ -23,7 +21,7 @@ public interface EmprestimoService {
 
     ResumoEmprestimoDTO buscarPorId(UUID id);
 
-    Page<ResumoEmprestimoProjection> listarTodos(int pagina, int tamanho, String campoOrdenacao, String direcao);
+    Page<ResumoEmprestimoProjecao> listarTodos(int pagina, int tamanho, String campoOrdenacao, String direcao);
 
     Cliente buscarClienteOuLancar(UUID uuid);
 

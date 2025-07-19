@@ -4,6 +4,7 @@ import br.com.acervofacil.api.dto.request.ClienteDTO;
 import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
 import br.com.acervofacil.api.dto.response.*;
 import br.com.acervofacil.api.projections.ClienteComEnderecoContatoProjecao;
+import br.com.acervofacil.api.projections.ClienteResumoProjecao;
 import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.service.cliente.ClienteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -143,5 +144,26 @@ public class ClienteController {
         } else {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    @Operation(summary = "Buscar resumo do cliente por ID ou CPF")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Resumo do cliente encontrado"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Parâmetro inválido")
+    })
+    @GetMapping("/resumo/{identificador}")
+    public ResponseEntity<?> buscarResumoClientePorIdOuCpf(
+            @Parameter(description = "Identificador do cliente: UUID (ID) ou CPF (somente números)", required = true)
+            @PathVariable @NotBlank String identificador) {
+        ClienteResumoProjecao resumo;
+
+        if (identificador.length() > 11) {
+            resumo = clienteService.buscarResumoClientePorId(UUID.fromString(identificador));
+        } else {
+            resumo = clienteService.buscarResumoClientePorCpf(identificador);
+        }
+
+        return ApiUtils.obterResponseEntityOk(resumo, null);
     }
 }

@@ -3,7 +3,7 @@ package br.com.acervofacil.api.controller;
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.RespostaPadronizada;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
-import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
+import br.com.acervofacil.api.projections.ResumoEmprestimoProjecao;
 import br.com.acervofacil.utils.ApiUtils;
 import br.com.acervofacil.domain.enums.StatusEmprestimo;
 import br.com.acervofacil.domain.service.emprestimo.EmprestimoService;
@@ -109,13 +109,13 @@ public class EmprestimoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = RespostaPadronizada.class)))
     })
     @GetMapping
-    public ResponseEntity<RespostaPadronizada<Page<ResumoEmprestimoProjection>>> listarTodos(
+    public ResponseEntity<RespostaPadronizada<Page<ResumoEmprestimoProjecao>>> listarTodos(
             @RequestParam(defaultValue = "0") int pagina,
             @RequestParam(defaultValue = "10") int tamanho,
             @RequestParam(defaultValue = "dataEmprestimo") String campoOrdenacao,
             @RequestParam(defaultValue = "DESC") String direcao) {
 
-        Page<ResumoEmprestimoProjection> emprestimos = emprestimoService.listarTodos(pagina, tamanho, campoOrdenacao, direcao);
+        Page<ResumoEmprestimoProjecao> emprestimos = emprestimoService.listarTodos(pagina, tamanho, campoOrdenacao, direcao);
         if( emprestimos.getTotalElements() > 0 )
             return ApiUtils.obterResponseEntityOk(emprestimos, "Emprestimos Listados com sucesos.");
         return ApiUtils.obterResponseEntityNoContent(null);

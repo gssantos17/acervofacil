@@ -7,6 +7,7 @@ import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
 import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
 import br.com.acervofacil.api.dto.mapper.ClienteMapper;
 import br.com.acervofacil.api.dto.mapper.ContatoMapper;
+import br.com.acervofacil.api.projections.ClienteResumoProjecao;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.domain.entity.Contato;
 import br.com.acervofacil.domain.entity.Endereco;
@@ -17,6 +18,7 @@ import br.com.acervofacil.domain.repository.cliente.ClienteRepository;
 import br.com.acervofacil.domain.repository.ContatoRepository;
 import br.com.acervofacil.domain.repository.EnderecoRepository;
 import br.com.acervofacil.domain.service.usuario.UsuarioServiceImpl;
+import br.com.acervofacil.utils.ServiceUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -68,7 +70,7 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     @Transactional
-    @CacheEvict(value = {"clientesById", "clientesByCpf"}, key = "#id")
+    @CacheEvict(value = {"clientesById", "clientesByCpf", "resumoClientesByCpf", "resumoClientesById"}, key = "#id")
     @Override
     public void deletar(UUID id) {
         Cliente cliente = obterClientePorId(id);
@@ -124,14 +126,41 @@ public class ClienteServiceImpl implements ClienteService {
         return new PaginacaoCustomizada<>(clientesPage);
     }
 
+    @Cacheable(value = "resumoClientesById", key = "#id")
+    @Override
+    public ClienteResumoProjecao buscarResumoClientePorId(UUID id) {
+        return ServiceUtils.obterOuLancar(
+                clienteRepository.findResumoById(id),
+                "Cliente",
+                id.toString()
+        );
+    }
+
+    @Cacheable(value = "resumoClientesByCpf", key = "#cpf")
+    @Override
+    public ClienteResumoProjecao buscarResumoClientePorCpf(String cpf) {
+        return ServiceUtils.obterOuLancar(
+                clienteRepository.findResumoByCpf(cpf),
+                "Cliente",
+                cpf
+        );
+    }
+
+
     private Cliente obterClientePorId(UUID id) {
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado - ID: " + id));
+        return ServiceUtils.obterOuLancar(
+                clienteRepository.findById(id),
+                "Cliente",
+                id.toString()
+        );
     }
 
     private Cliente obterClientePorCPF(String cpf) {
-        return clienteRepository.findByCpf(cpf)
-                .orElseThrow(() -> new ServiceException("Cliente não encontrado com o CPF fornecido: " + cpf));
+        return ServiceUtils.obterOuLancar(
+                clienteRepository.findByCpf(cpf),
+                "Cliente",
+                cpf
+        );
     }
 
     private void atualizarContatoSeNecessario(Cliente cliente, Cliente clienteAtualizado, ClienteUpdateDTO dto) {

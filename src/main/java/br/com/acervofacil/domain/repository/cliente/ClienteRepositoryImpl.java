@@ -36,4 +36,46 @@ public class ClienteRepositoryImpl {
                     "LEFT JOIN c.usuario u " +
                     "WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', ?1, '%'))";
 
+    public static final String BUSCAR_CLIENTE_RESUMO_POR_ID =
+            "SELECT " +
+                    "c.nome AS nome, " +
+                    "c.cpf AS cpf, " +
+                    "c.dataNascimento AS dataNascimento, " +
+                    "ct.telefoneCelular AS telefoneCelular, " +
+                    "ct.telefoneFixo AS telefoneFixo, " +
+                    "ct.email AS email, " +
+                    "e.rua AS rua, " +
+                    "e.numero AS numero, " +
+                    "e.complemento AS complemento, " +
+                    "e.bairro AS bairro, " +
+                    "e.cidade AS cidade, " +
+                    "e.estado AS estado, " +
+                    "e.cep AS cep " +
+                    "FROM Cliente c " +
+                    "JOIN c.contato ct " +
+                    "JOIN c.endereco e " +
+                    "WHERE c.id = ?1";
+
+    public static final String BUSCAR_CLIENTE_RESUMO_POR_CPF =
+            "SELECT " +
+                    "c.nome AS nome, " +
+                    "c.cpf AS cpf, " +
+                    "c.dataNascimento AS dataNascimento, " +
+                    "ct.telefoneCelular AS telefoneCelular, " +
+                    "ct.telefoneFixo AS telefoneFixo, " +
+                    "ct.email AS email, " +
+                    "e.rua AS rua, " +
+                    "e.numero AS numero, " +
+                    "e.complemento AS complemento, " +
+                    "e.bairro AS bairro, " +
+                    "e.cidade AS cidade, " +
+                    "e.estado AS estado, " +
+                    "e.cep AS cep " +
+                    "FROM Cliente c " +
+                    "JOIN c.contato ct " +
+                    "JOIN c.endereco e " +
+                    "WHERE c.cpf = ?1";
+
+
+
 }

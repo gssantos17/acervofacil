@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public interface ResumoEmprestimoProjection {
+public interface ResumoEmprestimoProjecao {
 
     UUID getId();
 

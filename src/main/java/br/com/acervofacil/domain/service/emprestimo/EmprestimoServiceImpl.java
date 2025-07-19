@@ -2,7 +2,7 @@ package br.com.acervofacil.domain.service.emprestimo;
 
 import br.com.acervofacil.api.dto.request.RequisicaoEmprestimoDTO;
 import br.com.acervofacil.api.dto.response.ResumoEmprestimoDTO;
-import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
+import br.com.acervofacil.api.projections.ResumoEmprestimoProjecao;
 import br.com.acervofacil.utils.ServiceUtils;
 import br.com.acervofacil.api.dto.mapper.EmprestimoMapper;
 import br.com.acervofacil.domain.entity.*;
@@ -101,7 +101,7 @@ public class EmprestimoServiceImpl implements EmprestimoService {
     }
 
     @Override
-    public Page<ResumoEmprestimoProjection> listarTodos(int pagina, int tamanho, String campoOrdenacao, String direcao) {
+    public Page<ResumoEmprestimoProjecao> listarTodos(int pagina, int tamanho, String campoOrdenacao, String direcao) {
         Pageable pageable = ServiceUtils.criarPageable(pagina, tamanho, campoOrdenacao, direcao);
         return emprestimoRepository.listarResumoEmprestimos(pageable);
     }

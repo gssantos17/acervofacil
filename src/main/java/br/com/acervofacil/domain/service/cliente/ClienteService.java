@@ -4,6 +4,7 @@ import br.com.acervofacil.api.dto.request.ClienteUpdateDTO;
 import br.com.acervofacil.api.projections.ClienteComEnderecoContatoProjecao;
 import br.com.acervofacil.api.dto.response.ClienteResponseDTO;
 import br.com.acervofacil.api.dto.response.PaginacaoCustomizada;
+import br.com.acervofacil.api.projections.ClienteResumoProjecao;
 import br.com.acervofacil.domain.entity.Cliente;
 import br.com.acervofacil.api.dto.request.ClienteDTO;
 
@@ -75,4 +76,20 @@ public interface ClienteService {
      * @return Página contendo os clientes encontrados.
      */
     PaginacaoCustomizada<ClienteComEnderecoContatoProjecao> obterClientesPaginados(int page, int size);
+
+    /**
+     * Busca resumo do cliente por ID usando projeção ClienteResumoProjecao.
+     *
+     * @param id Identificador único do cliente.
+     * @return ClienteComEnderecoContatoProjecao, se encontrado.
+     */
+    ClienteResumoProjecao buscarResumoClientePorId(UUID id);
+
+    /**
+     * Busca resumo do cliente por CPF usando projeção ClienteResumoProjecao.
+     *
+     * @param cpf CPF do cliente.
+     * @return ClienteComEnderecoContatoProjecao, se encontrado.
+     */
+    ClienteResumoProjecao buscarResumoClientePorCpf(String cpf);
 }

@@ -1,6 +1,6 @@
 package br.com.acervofacil.domain.repository.emprestimo;
 
-import br.com.acervofacil.api.projections.ResumoEmprestimoProjection;
+import br.com.acervofacil.api.projections.ResumoEmprestimoProjecao;
 import br.com.acervofacil.domain.entity.Emprestimo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +34,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, UUID> {
                     JOIN tb_livro l ON l.id = e.livro_id     
                     ORDER BY e.data_emprestimo DESC
     """, nativeQuery = true)
-    Page<ResumoEmprestimoProjection> listarResumoEmprestimos(Pageable pageable);
+    Page<ResumoEmprestimoProjecao> listarResumoEmprestimos(Pageable pageable);
 
 
 }

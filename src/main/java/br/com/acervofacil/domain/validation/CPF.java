@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD, ElementType.PARAMETER}) // A anotação pode ser usada em campos e parâmetros
 @Retention(RetentionPolicy.RUNTIME) // A anotação será processada em tempo de execução
-@Constraint(validatedBy = CPFValidator.class) // Classe que implementa a lógica de validação
+@Constraint(validatedBy = ValidadorCPF.class) // Classe que implementa a lógica de validação
 public @interface CPF {
     String message() default "CPF inválido."; // Mensagem de erro padrão
 
